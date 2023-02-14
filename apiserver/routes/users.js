@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var db = require('../utils/database');
+var db = require('../services/database');
 
 
 resultOK = {
@@ -8,47 +8,6 @@ resultOK = {
   message: ""
 }
 
-/**
- * Get User information
- */
-router.get('/', (req, res) => {
-
-    let result = {
-        result: "OK",
-        message: ""
-    }
-
-    // No prameters
-    if (Object.keys(req.body).length === 0) {
-        result.result = "NotOK";
-        result.message = "No parameters";
-
-        res.status(204).end(); //.send("Bad Request");
-        //res.json(result);
-    } else {
-        console.info(req.body)
-
-        userID = req.body.userId;
-        password = req.body.password;
-        fullName = req.body.userName;
-        email = req.body.email;
-
-        let sql = `INSERT INTO UserInfo(UserId, Password, FullName, Email) 
-                VALUES ( ${userID}, ${password}, ${fullName}, ${email} )`
-
-        resultFail = {
-            result: "NotOK",
-            message: "ID or password are invalid."
-        };
-        db.DBPool.query(sql, (err, data) => {
-            if (err) throw err;
-
-            console.log(data);
-        });
-
-        res.json(resultOK);
-    }
-});
 
 
 /**
@@ -106,5 +65,48 @@ router.post('/', (req, res) => {
         });
     }
 });
+
+/**
+ * Get User information
+ */
+router.get('/', (req, res) => {
+
+    let result = {
+        result: "OK",
+        message: ""
+    }
+
+    // No prameters
+    if (Object.keys(req.body).length === 0) {
+        result.result = "NotOK";
+        result.message = "No parameters";
+
+        res.status(204).end(); //.send("Bad Request");
+        //res.json(result);
+    } else {
+        console.info(req.body)
+
+        userID = req.body.userId;
+        password = req.body.password;
+        fullName = req.body.userName;
+        email = req.body.email;
+
+        let sql = `INSERT INTO UserInfo(UserId, Password, FullName, Email) 
+                VALUES ( ${userID}, ${password}, ${fullName}, ${email} )`
+
+        resultFail = {
+            result: "NotOK",
+            message: "ID or password are invalid."
+        };
+        db.DBPool.query(sql, (err, data) => {
+            if (err) throw err;
+
+            console.log(data);
+        });
+
+        res.json(resultOK);
+    }
+});
+
 
 module.exports = router;
