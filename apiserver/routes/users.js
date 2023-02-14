@@ -56,11 +56,6 @@ router.get('/', (req, res) => {
  */
 router.post('/', (req, res) => {
 
-    let result = {
-        result: "OK",
-        message: ""
-    }
-
     // No prameters
     if (Object.keys(req.body).length === 0) {
         result.result = "NotOK";
@@ -76,20 +71,29 @@ router.post('/', (req, res) => {
         email = req.body.email;
 
         let sql = `INSERT INTO UserInfo(UserId, Password, FullName, Email) 
-                VALUES ( ${userID}, ${password}, ${fullName}, ${email} )`
+                VALUES ( '${userID}', '${password}', '${fullName}', '${email}' )`
 
         resultFail = {
             result: "NotOK",
             message: "ID or password are invalid."
         };
 
-        db.Query(sql, (err, data) => {
-            if (err) throw err;
+        db.pool.query(sql, (err, data) => {
+            if (err) {
+                console.error(err.message);
 
-            console.log(data);
+                res.status(500);
+                res.send({
+                    result: "Error",
+                    message: err.sqlMessage,
+                });
+            } else {
+                res.json({
+                    result: "OK",
+                    message: "",
+                });
+            }
         });
-
-        res.json(resultOK);
     }
 });
 

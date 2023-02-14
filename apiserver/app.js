@@ -5,10 +5,8 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var database = require('./utils/database');
 var config = require('./utils/config');
 
-database.InitializeDatabase(config.database);
 
 var app = express();
 

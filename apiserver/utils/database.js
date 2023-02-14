@@ -1,9 +1,7 @@
 const mysql = require('mysql');
+const config = require('./config');
 
-var pool = null;
-function InitializeDatabase(dbInfo) {
-    pool = mysql.createPool(dbInfo)
-}
+const pool = mysql.createPool(config.database);
 
 /**
  * Execute Query.
@@ -18,6 +16,5 @@ function Query(sql, handler = (err, row))
 }
 
 module.exports = {
-    InitializeDatabase,
-    Query
+    pool
 }
