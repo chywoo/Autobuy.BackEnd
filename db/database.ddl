@@ -1,9 +1,12 @@
 
 CREATE DATABASE IF NOT EXISTS autobuy;
 
-CREATE USER IF NOT EXISTS 'capstone'@'%' WITH mysql_native_password IDENTIFIED BY 'capstone2023';
+CREATE USER IF NOT EXISTS 'capstone'@'%';
+
+ALTER USER 'capstone'@'%' IDENTIFIED WITH mysql_native_password BY 'capstone2023';
 
 GRANT ALL PRIVILEGES ON autobuy.* TO 'capstone'@'%' WITH GRANT OPTION;
+
 FLUSH PRIVILEGES;
 
 USE autobuy;
