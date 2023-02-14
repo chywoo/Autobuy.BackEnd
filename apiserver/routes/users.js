@@ -26,7 +26,7 @@ router.post('/', (req, res) => {
           message: "ID or password are invalid."
       }
 
-      res.json(resultFail)
+      res.json(resultOK)
     });
 
 
