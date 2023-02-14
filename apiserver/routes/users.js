@@ -67,45 +67,21 @@ router.post('/', (req, res) => {
 });
 
 /**
- * Get User information
+ * Get the list of users
  */
 router.get('/', (req, res) => {
+});
 
-    let result = {
-        result: "OK",
-        message: ""
-    }
+/**
+ * Get the details of specific user.
+ */
+router.get('/:userID', (req, res) => {
+});
 
-    // No prameters
-    if (Object.keys(req.body).length === 0) {
-        result.result = "NotOK";
-        result.message = "No parameters";
-
-        res.status(204).end(); //.send("Bad Request");
-        //res.json(result);
-    } else {
-        console.info(req.body)
-
-        userID = req.body.userId;
-        password = req.body.password;
-        fullName = req.body.userName;
-        email = req.body.email;
-
-        let sql = `INSERT INTO UserInfo(UserId, Password, FullName, Email) 
-                VALUES ( ${userID}, ${password}, ${fullName}, ${email} )`
-
-        resultFail = {
-            result: "NotOK",
-            message: "ID or password are invalid."
-        };
-        db.DBPool.query(sql, (err, data) => {
-            if (err) throw err;
-
-            console.log(data);
-        });
-
-        res.json(resultOK);
-    }
+/**
+ * Delete the specific user.
+ */
+router.delete('/:userID', (req, res) => {
 });
 
 
