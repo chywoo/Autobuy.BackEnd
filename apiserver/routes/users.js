@@ -79,20 +79,30 @@ router.post('/', (req, res) => {
         };
 
         db.pool.query(sql, (err, data) => {
+            let result = "OK";
+            let message = "";
+
             if (err) {
                 console.error(err.message);
 
-                res.status(500);
-                res.send({
-                    result: "Error",
-                    message: err.sqlMessage,
-                });
-            } else {
-                res.json({
-                    result: "OK",
-                    message: "",
-                });
+                switch (err.code) {
+                    case "ER_DUP_ENTRY":
+                        result = "DUPLIATED";
+                        message = "The user already exists.";
+                        res.status(400);
+                        break;
+
+                    default:
+                        result = "Error";
+                        message = err.sqlMessage
+                        res.status(500);
+                        break;
+                }
             }
+            res.json({
+                result: result,
+                message: message
+            });
         });
     }
 });
