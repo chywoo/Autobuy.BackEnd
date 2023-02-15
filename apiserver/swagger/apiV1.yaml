@@ -1,0 +1,73 @@
+openapi: 3.0.3
+info:
+  title: API ME
+  description: API ME
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:3000/api/latest/'
+
+# Define common JSON data format
+components:
+  schemas:
+    Result:
+      type: "object"
+      properties:
+        result:
+          type: "string"
+        message:
+          type: "string"
+
+tags:
+  - name: Auth
+    description: Authentication
+  - name: User
+    description: User Management
+
+paths:
+
+  /users:
+    post:
+      description: "Create a new user"
+      tags: [User]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: "string"
+                password:
+                  type: "string"
+                fullName:
+                  type: "string"
+                email:
+                  type: "string"
+
+      responses:
+        "200":
+          description: "OK"
+        "204":
+          description: "Invalid name or data"
+        "400":
+          description: "The user already exists"
+        "500":
+          description: "Internal server error"
+
+
+  /auth/login:
+    post:
+      summary: "User Login"
+      description: ""
+      tags: [Auth]
+      parameters:
+        - name: petId
+          in: path
+          description: ID of pet to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: "successful operation"
