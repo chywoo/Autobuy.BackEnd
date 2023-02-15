@@ -24,18 +24,29 @@ router.post('/', (req, res) => {
     } else {
         console.info(req.body)
 
-        userID = req.body.userId;
+        userId = req.body.userId;
         password = req.body.password;
-        fullName = req.body.userName;
+        fullName = req.body.fullName;
         email = req.body.email;
 
-        let sql = `INSERT INTO UserInfo(UserId, Password, FullName, Email) 
-                VALUES ( '${userID}', '${password}', '${fullName}', '${email}' )`
+        // Invalid data
+        if ( userId === undefined
+            || password === undefined
+            || fullName === undefined
+            || email === undefined ) {
 
-        resultFail = {
-            result: "NotOK",
-            message: "ID or password are invalid."
-        };
+            res.status(204);
+            res.json({
+                result: "Error",
+                message: "ID or password are invalid."
+            });
+
+            return;
+        }
+
+        let sql = `INSERT INTO UserInfo (UserId, Password, FullName, Email) 
+                VALUES ( '${userId}', '${password}', '${fullName}', '${email}' )`
+
 
         db.pool.query(sql, (err, data) => {
             let result = "OK";
@@ -46,7 +57,7 @@ router.post('/', (req, res) => {
 
                 switch (err.code) {
                     case "ER_DUP_ENTRY":
-                        result = "DUPLIATED";
+                        result = "DUPLICATED";
                         message = "The user already exists.";
                         res.status(400);
                         break;
@@ -58,6 +69,7 @@ router.post('/', (req, res) => {
                         break;
                 }
             }
+            
             res.json({
                 result: result,
                 message: message
