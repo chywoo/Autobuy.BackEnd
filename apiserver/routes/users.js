@@ -35,7 +35,7 @@ router.post('/', (req, res) => {
             || fullName === undefined
             || email === undefined ) {
 
-            res.status(204);
+            res.status(400);
             res.json({
                 result: "Error",
                 message: "ID or password are invalid."

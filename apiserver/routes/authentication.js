@@ -62,6 +62,7 @@ router.post('/login', (req, res) => {
                     result = "OK";
                 } else {
                     result = "Failure";
+                    res.status(400)
                 }
             }
             res.json({
