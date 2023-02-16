@@ -35,7 +35,7 @@ paths:
             schema:
               type: object
               properties:
-                userId:
+                userName:
                   type: "string"
                 password:
                   type: "string"
@@ -64,7 +64,7 @@ paths:
             schema:
               type: object
               properties:
-                userId:
+                userName:
                   type: "string"
                 password:
                   type: "string"
