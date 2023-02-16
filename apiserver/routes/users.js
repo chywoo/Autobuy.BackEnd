@@ -58,7 +58,7 @@ router.post('/', (req, res) => {
                     case "ER_DUP_ENTRY":
                         result = "DUPLICATED";
                         message = "The user already exists.";
-                        res.status(400).json({
+                        res.status(200).json({
                             result: result,
                             message: message
                         });
@@ -73,6 +73,11 @@ router.post('/', (req, res) => {
                         });
                         break;
                 }
+            } else {
+                res.status(200).json({
+                    result: result,
+                    message: message
+                });
             }
         });
     }
