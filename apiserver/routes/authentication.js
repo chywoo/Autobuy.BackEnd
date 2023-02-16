@@ -20,12 +20,12 @@ router.post('/login', (req, res) => {
         return;
     } else {
         console.debug(req.body)
-        var userId, password
+        var userName, password
 
 
         // Check user Id and password parameters
         try {
-            userId = req.body.userId;
+            userName = req.body.userName;
             password = req.body.password;
         } catch (ex) {
             console.error(ex.message);
@@ -39,7 +39,7 @@ router.post('/login', (req, res) => {
             return
         }
 
-        let sql = `SELECT COUNT(*) AS Count FROM UserInfo WHERE UserId = '${userId}' AND Password = '${password}'`;
+        let sql = `SELECT COUNT(*) AS Count FROM UserInfo WHERE UserName = '${userName}' AND Password = '${password}'`;
 
         db.pool.query(sql, (err, data) => {
             let result = "OK";
