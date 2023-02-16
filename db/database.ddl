@@ -12,8 +12,7 @@ FLUSH PRIVILEGES;
 USE autobuy;
 
 CREATE TABLE IF NOT EXISTS UserInfo (
-  UserId   varchar(20) NOT NULL, 
+  UserName   varchar(20) NOT NULL PRIMARY KEY, 
   Password varchar(255) NOT NULL, 
   FullName varchar(255) NOT NULL, 
-  Email    varchar(255) NOT NULL, 
-  PRIMARY KEY (UserId));
+  Email    varchar(255) NOT NULL);

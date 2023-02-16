@@ -24,13 +24,13 @@ router.post('/', (req, res) => {
     } else {
         console.info(req.body)
 
-        userId = req.body.userId;
+        userName = req.body.userName;
         password = req.body.password;
         fullName = req.body.fullName;
         email = req.body.email;
 
         // Invalid data
-        if ( userId === undefined
+        if ( userName === undefined
             || password === undefined
             || fullName === undefined
             || email === undefined ) {
@@ -44,8 +44,8 @@ router.post('/', (req, res) => {
             return;
         }
 
-        let sql = `INSERT INTO UserInfo (UserId, Password, FullName, Email) 
-                VALUES ( '${userId}', '${password}', '${fullName}', '${email}' )`
+        let sql = `INSERT INTO UserInfo (UserName, Password, FullName, Email) 
+                VALUES ( '${userName}', '${password}', '${fullName}', '${email}' )`
 
 
         db.pool.query(sql, (err, data) => {
