@@ -35,8 +35,7 @@ router.post('/', (req, res) => {
             || fullName === undefined
             || email === undefined ) {
 
-            res.status(400);
-            res.json({
+            res.status(400).json({
                 result: "Error",
                 message: "ID or password are invalid."
             });
@@ -59,21 +58,22 @@ router.post('/', (req, res) => {
                     case "ER_DUP_ENTRY":
                         result = "DUPLICATED";
                         message = "The user already exists.";
-                        res.status(400);
+                        res.status(400).json({
+                            result: result,
+                            message: message
+                        });
                         break;
 
                     default:
                         result = "Error";
                         message = err.sqlMessage
-                        res.status(500);
+                        res.status(500).json({
+                            result: result,
+                            message: message
+                        });
                         break;
                 }
             }
-            
-            res.json({
-                result: result,
-                message: message
-            });
         });
     }
 });
