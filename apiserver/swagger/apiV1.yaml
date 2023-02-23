@@ -16,6 +16,17 @@ components:
           type: "string"
         message:
           type: "string"
+    UserInfo:
+        type: "object"
+        properties:
+            userName:
+              type: "string"
+            password:
+              type: "string"
+            fullName:
+              type: "string"
+            email:
+              type: "string"
 
 tags:
   - name: Auth
@@ -33,16 +44,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                userName:
-                  type: "string"
-                password:
-                  type: "string"
-                fullName:
-                  type: "string"
-                email:
-                  type: "string"
+              $ref: "#/components/schemas/UserInfo"
 
       responses:
         "200":
@@ -52,6 +54,92 @@ paths:
         "500":
           description: "Internal server error"
 
+  /users/{userName}:
+    get:
+        description: "Get user by userName"
+        tags: [Users]
+        parameters:
+            - name: userName
+              in: path
+              description: "userName"
+              required: true
+              schema:
+                  type: string
+        responses:
+            "200":
+              description: "OK"
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/UserInfo"
+            "404":
+              description: "User not found"
+            "500":
+              description: "Internal server error"
+
+    put:
+        description: "Update user by userName"
+        tags: [Users]
+        parameters:
+            - name: id
+              in: path
+              description: "userName"
+              required: true
+              schema:
+                  type: string
+        requestBody:
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/UserInfo"
+        responses:
+            "200":
+              description: "OK"
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/UserInfo"
+            "404":
+              description: "User not found"
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Result"
+            "500":
+              description: "Internal server error"
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Result"
+    delete:
+        description: "Delete user by id"
+        tags: [Users]
+        parameters:
+            - name: id
+              in: path
+              description: "User id"
+              required: true
+              schema:
+                  type: string
+        responses:
+            "200":
+              description: "OK"
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Result"
+            "404":
+              description: "User not found"
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Result"
+            "500":
+              description: "Internal server error"
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Result"
 
   /auth/login:
     post:
