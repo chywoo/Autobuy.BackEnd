@@ -37,6 +37,23 @@ tags:
 paths:
 
   /users:
+    get:
+      description: "Get all users"
+      tags: [Users]
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/UserInfo"
+        "500":
+          description: "Internal server error"
+      security:
+        - api_key: []
+
     post:
       description: "Create a new user"
       tags: [Users]

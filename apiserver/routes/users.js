@@ -87,6 +87,55 @@ router.post('/', (req, res) => {
  * Get the list of users
  */
 router.get('/', (req, res) => {
+    let sql = `SELECT * FROM UserInfo ORDER BY userName`;
+
+    db.pool.query(sql, (err, data) => {
+        if (err) {
+            console.error(err.message);
+            switch (erro.code) {
+                default:
+                    result = "Error";
+                    message = err.sqlMessage
+                    res.status(500).json({
+                        result: result,
+                        message: message
+                    });
+                    break;
+            }
+        } else {
+            if (data.length === 0) {
+                res.status(404).json({
+                    result: "NotOK",
+                    message: "User not found."
+                });
+                return;
+            }
+
+            try {
+                var users = [];
+
+                for (var i = 0; i < data.length; i++) {
+                    var user = {
+                        userName: data[i].UserName,
+                        password: "",
+                        fullName: data[i].FullName,
+                        email: data[i].Email
+                    }
+                    users.push(user);
+                }
+                res.status(200).json(users);
+            }
+            catch (err) {
+                console.error(err.message)
+                result = "Error";
+                message = err.sqlMessage
+                res.status(500).json({
+                    result: result,
+                    message: message
+                });
+            }
+        }
+    });
 });
 
 /**
