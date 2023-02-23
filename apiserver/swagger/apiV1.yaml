@@ -81,7 +81,7 @@ paths:
         description: "Update user by userName"
         tags: [Users]
         parameters:
-            - name: id
+            - name: userName
               in: path
               description: "userName"
               required: true
@@ -115,7 +115,7 @@ paths:
         description: "Delete user by id"
         tags: [Users]
         parameters:
-            - name: id
+            - name: userName
               in: path
               description: "User id"
               required: true
