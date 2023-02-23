@@ -92,13 +92,75 @@ router.get('/', (req, res) => {
 /**
  * Get the details of specific user.
  */
-router.get('/:userID', (req, res) => {
+router.get('/:userName', (req, res) => {
+    userName = req.params.userName;
+
+    let sql = `SELECT * FROM UserInfo WHERE userName = '${userName}'`;
+
+    db.pool.query(sql, (err, data) => {
+        if (err) {
+            console.error(err.message);
+
+            switch (erro.code) {
+                case "ER_DUP_ENTRY":
+                    result = "DUPLICATED";
+                    message = "The user already exists.";
+                    res.status(200).json({
+                        result: result,
+                        message: message
+                    });
+                    break;
+
+                default:
+                    result = "Error";
+                    message = err.sqlMessage
+                    res.status(500).json({
+                        result: result,
+                        message: message
+                    });
+                    break;
+            }
+        } else {
+            if (data.length === 0) {
+                res.status(404).json({
+                    result: "NotOK",
+                    message: "User not found."
+                });
+                return;
+            }
+
+            try {
+                userInfo = {
+                    userName: data[0].userName,
+                    password: "",
+                    fullName: data[0].fullName,
+                    email: data[0].Email
+                }
+                res.status(200).json(userInfo);
+            }
+            catch (err) {
+                console.error(err.message)
+                result = "Error";
+                message = err.sqlMessage
+                res.status(500).json({
+                    result: result,
+                    message: message
+                });
+            }
+        }
+    });
+});
+
+/**
+ * Update the specific user.
+ */
+router.put('/:userName', (req, res) => {
 });
 
 /**
  * Delete the specific user.
  */
-router.delete('/:userID', (req, res) => {
+router.delete('/:userName', (req, res) => {
 });
 
 
