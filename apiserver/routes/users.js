@@ -155,7 +155,69 @@ router.get('/:userName', (req, res) => {
  * Update the specific user.
  */
 router.put('/:userName', (req, res) => {
+    userName = req.params.userName;
+    userInfo = req.body;
+
+    try {
+        var sql =
+            `UPDATE UserInfo
+        SET 
+            Password = '${userInfo.password}',
+            FullName = '${userInfo.fullName}',
+            Email = '${userInfo.email}'
+        WHERE userName = '${userName}'`;
+    }
+    catch (err) {
+        console.error(err.message)
+        result = "Error";
+        message = err.message
+
+        // 400 Bad Request: Invalid data
+        res.status(400).json({
+            result: result,
+            message: message
+        });
+
+        return;
+    }
+
+    db.pool.query(sql, (err, data) => {
+        if (err) {
+            console.error(err.message);
+
+            switch (erro.code) {
+                case "ER_DUP_ENTRY":
+                    result = "DUPLICATED";
+                    message = "The user already exists.";
+                    res.status(200).json({
+                        result: result,
+                        message: message
+                    });
+                    break;
+
+                default:
+                    result = "Error";
+                    message = err.sqlMessage
+                    res.status(500).json({
+                        result: result,
+                        message: message
+                    });
+                    break;
+            }
+        } else {
+            if (data.affectedRows === 0) {
+                res.status(404).json({
+                    result: "NotOK",
+                    message: "User not found."
+                });
+                return;
+            } else {
+                res.status(200).json(resultOK);
+            }
+        }
+    });
 });
+
 
 /**
  * Delete the specific user.
