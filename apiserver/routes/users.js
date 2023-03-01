@@ -1,9 +1,11 @@
-var express = require('express');
-var router = express.Router();
-var db = require('../services/database');
+"use strict"
+
+const express = require('express');
+const router = express.Router();
+const db = require('../services/database');
 
 
-resultOK = {
+const resultOK = {
   result: "OK",
   message: ""
 }
@@ -15,7 +17,7 @@ resultOK = {
  */
 router.post('/', (req, res) => {
 
-    // No prameters
+    // No parameters
     if (Object.keys(req.body).length === 0) {
         result.result = "NotOK";
         result.message = "No parameters";
@@ -24,10 +26,10 @@ router.post('/', (req, res) => {
     } else {
         console.info(req.body)
 
-        userName = req.body.userName;
-        password = req.body.password;
-        fullName = req.body.fullName;
-        email = req.body.email;
+        let userName = req.body.userName;
+        let password = req.body.password;
+        let fullName = req.body.fullName;
+        let email = req.body.email;
 
         // Invalid data
         if ( userName === undefined
@@ -92,10 +94,10 @@ router.get('/', (req, res) => {
     db.pool.query(sql, (err, data) => {
         if (err) {
             console.error(err.message);
-            switch (erro.code) {
+            switch (err.code) {
                 default:
-                    result = "Error";
-                    message = err.sqlMessage
+                    let result = "Error";
+                    let message = err.sqlMessage
                     res.status(500).json({
                         result: result,
                         message: message
@@ -112,10 +114,10 @@ router.get('/', (req, res) => {
             }
 
             try {
-                var users = [];
+                let users = [];
 
-                for (var i = 0; i < data.length; i++) {
-                    var user = {
+                for (let i = 0; i < data.length; i++) {
+                    let user = {
                         userName: data[i].UserName,
                         password: "",
                         fullName: data[i].FullName,
@@ -127,8 +129,8 @@ router.get('/', (req, res) => {
             }
             catch (err) {
                 console.error(err.message)
-                result = "Error";
-                message = err.sqlMessage
+                let result = "Error";
+                let message = err.sqlMessage
                 res.status(500).json({
                     result: result,
                     message: message
@@ -142,15 +144,18 @@ router.get('/', (req, res) => {
  * Get the details of specific user.
  */
 router.get('/:userName', (req, res) => {
-    userName = req.params.userName;
+    let userName = req.params.userName;
 
     let sql = `SELECT * FROM UserInfo WHERE userName = '${userName}'`;
 
     db.pool.query(sql, (err, data) => {
+        let result = "OK";
+        let message = "";
+
         if (err) {
             console.error(err.message);
 
-            switch (erro.code) {
+            switch (err.code) {
                 case "ER_DUP_ENTRY":
                     result = "DUPLICATED";
                     message = "The user already exists.";
@@ -179,10 +184,10 @@ router.get('/:userName', (req, res) => {
             }
 
             try {
-                userInfo = {
-                    userName: data[0].userName,
+                let userInfo = {
+                    userName: data[0].UserName,
                     password: "",
-                    fullName: data[0].fullName,
+                    fullName: data[0].FullName,
                     email: data[0].Email
                 }
                 res.status(200).json(userInfo);
@@ -204,22 +209,23 @@ router.get('/:userName', (req, res) => {
  * Update the specific user.
  */
 router.put('/:userName', (req, res) => {
-    userName = req.params.userName;
-    userInfo = req.body;
+    let userName = req.params.userName;
+    let userInfo = req.body;
+    let sql = "";
 
     try {
-        var sql =
-            `UPDATE UserInfo
+        sql =
+        `UPDATE UserInfo
         SET 
-            Password = '${userInfo.password}',
-            FullName = '${userInfo.fullName}',
-            Email = '${userInfo.email}'
+            Password = '${userInfo.Password}',
+            FullName = '${userInfo.FullName}',
+            Email = '${userInfo.Email}'
         WHERE userName = '${userName}'`;
     }
     catch (err) {
         console.error(err.message)
-        result = "Error";
-        message = err.message
+        let result = "Error";
+        let message = err.message
 
         // 400 Bad Request: Invalid data
         res.status(400).json({
@@ -231,10 +237,13 @@ router.put('/:userName', (req, res) => {
     }
 
     db.pool.query(sql, (err, data) => {
+        let result = "OK";
+        let message = "";
+
         if (err) {
             console.error(err.message);
 
-            switch (erro.code) {
+            switch (err.code) {
                 case "ER_DUP_ENTRY":
                     result = "DUPLICATED";
                     message = "The user already exists.";
@@ -259,7 +268,6 @@ router.put('/:userName', (req, res) => {
                     result: "NotOK",
                     message: "User not found."
                 });
-                return;
             } else {
                 res.status(200).json(resultOK);
             }
@@ -272,16 +280,16 @@ router.put('/:userName', (req, res) => {
  * Delete the specific user.
  */
 router.delete('/:userName', (req, res) => {
-    userName = req.params.userName;
+    let userName = req.params.userName;
+    let sql = "";
 
     try {
-        var sql =
-            `DELETE FROM UserInfo WHERE userName = '${userName}'`;
+        sql = `DELETE FROM UserInfo WHERE userName = '${userName}'`;
     }
     catch (err) {
         console.error(err.message)
-        result = "Error";
-        message = err.message
+        let result = "Error";
+        let message = err.message
 
         // 400 Bad Request: Invalid data
         res.status(400).json({
@@ -296,10 +304,10 @@ router.delete('/:userName', (req, res) => {
         if (err) {
             console.error(err.message);
 
-            switch (erro.code) {
+            switch (err.code) {
                 default:
-                    result = "Error";
-                    message = err.sqlMessage
+                    let result = "Error";
+                    let message = err.sqlMessage
                     res.status(500).json({
                         result: result,
                         message: message
@@ -312,7 +320,6 @@ router.delete('/:userName', (req, res) => {
                     result: "NotOK",
                     message: "User not found."
                 });
-                return;
             } else {
                 res.status(200).json(resultOK);
             }
