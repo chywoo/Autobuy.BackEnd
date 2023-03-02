@@ -217,9 +217,8 @@ router.put('/:userName', (req, res) => {
         sql =
         `UPDATE UserInfo
         SET 
-            Password = '${userInfo.Password}',
-            FullName = '${userInfo.FullName}',
-            Email = '${userInfo.Email}'
+            FullName = '${userInfo.fullName}',
+            Email = '${userInfo.email}'
         WHERE userName = '${userName}'`;
     }
     catch (err) {
