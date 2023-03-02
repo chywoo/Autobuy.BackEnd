@@ -2,6 +2,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var session = require('express-session');
 
 const {swaggerUi, specs} = require("./swagger");
 
@@ -19,6 +20,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+  resave: false,
+  secret: "@^%@ASDFY#9823f@",
+  saveUninitialized: false
+}));
 
 app.use('/', indexRouter);
 app.use('/api/v1/users', usersRouter);
