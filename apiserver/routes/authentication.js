@@ -2,6 +2,28 @@ var express = require('express');
 const db = require("../services/database");
 var router = express.Router();
 
+
+/**
+ * /auth/logout
+ */
+router.get('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error(err);
+            res.status(500).json({
+                result: "Error",
+                message: "Internal server error"
+            });
+        } else {
+            res.json({
+                result: "OK",
+                message: "Logout success"
+            });
+        }
+    });
+});
+
+
 /**
  * /auth/login
  */
