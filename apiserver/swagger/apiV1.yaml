@@ -180,3 +180,14 @@ paths:
           description: "Invalid name or data"
         "500":
           description: "Internal server error"
+
+  /auth/logout:
+    post:
+      summary: "User Logout"
+      description: ""
+      tags: [ Auth ]
+      responses:
+        "200":
+          description: "OK"
+        "500":
+          description: "Internal server error"
