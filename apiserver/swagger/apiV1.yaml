@@ -157,6 +157,18 @@ paths:
                 application/json:
                   schema:
                     $ref: "#/components/schemas/Result"
+  /auth:
+    get:
+      summary: "Acheck already login"
+      description: ""
+      tags: [ Auth ]
+      responses:
+        "200":
+          description: "OK"
+        "404":
+          description: "Not logged in"
+        "500":
+          description: "Internal server error"
 
   /auth/login:
     post:

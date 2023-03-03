@@ -2,6 +2,22 @@ var express = require('express');
 const db = require("../services/database");
 var router = express.Router();
 
+/**
+ * /auth
+ */
+router.get('/', (req, res) => {
+    if (req.session.islogin) {
+        res.json({
+            result: "OK",
+            message: "Already logged in"
+        });
+    } else {
+        res.status(404).json({
+            result: "NotOK",
+            message: "Not logged in"
+        });
+    }
+});
 
 /**
  * /auth/logout
