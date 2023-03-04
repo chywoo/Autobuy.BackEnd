@@ -6,11 +6,12 @@ var session = require('express-session');
 
 const {swaggerUi, specs} = require("./swagger");
 
-var config = require('./services/config');
+const config = require('./services/config');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var loginRouter = require('./routes/authentication');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const loginRouter = require('./routes/authentication');
+const rolesRouter = require('./routes/roles');
 
 
 var app = express();
@@ -28,6 +29,7 @@ app.use(session({
 
 app.use('/', indexRouter);
 app.use('/api/v1/users', usersRouter);
+app.use('/api/v1/roles', rolesRouter);
 app.use('/api/v1/auth', loginRouter);
 
 // Swagger Document
