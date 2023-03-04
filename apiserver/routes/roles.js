@@ -42,7 +42,7 @@ router.get('/', (req, res) => {
 
                 for (let i = 0; i < data.length; i++) {
                     let user = {
-                        roleId: data[i].roleID,
+                        roleID: data[i].roleID,
                         roleName: data[i].roleName
                     }
                     users.push(user);
