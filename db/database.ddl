@@ -11,24 +11,23 @@ FLUSH PRIVILEGES;
 
 USE autobuy;
 
+DROP TABLE Roles;
+CREATE TABLE Roles (
+  roleID   int(11)  PRIMARY KEY, 
+  roleName varchar(20) NOT NULL);
+
+INSERT INTO Roles(roleID, roleName) VALUES ( 1, 'USER');
+INSERT INTO Roles(roleID, roleName) VALUES ( 2, 'SELLER');
+INSERT INTO Roles(roleID, roleName) VALUES ( 3, 'ADMINISTRATOR');
+
 DROP TABLE UserInfo;
 
 CREATE TABLE UserInfo (
   UserName varchar(20) NOT NULL PRIMARY KEY, 
   Password varchar(255) NOT NULL, 
   FullName varchar(255) NOT NULL, 
-  Email    varchar(255) NOT NULL);
-
-
-DROP TABLE Roles;
-CREATE TABLE Roles (
-  roleID   int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
-  roleName varchar(20) NOT NULL);
-
-INSERT INTO Roles(roleName) VALUES ('USER');
-INSERT INTO Roles(roleName) VALUES ('SELLER');
-INSERT INTO Roles(roleName) VALUES ('ADMINISTRATOR');
-
+  Email    varchar(255) NOT NULL,
+  RoleID   int(11) default 1);
 
 DROP TABLE MakerInfo;
 CREATE TABLE MakerInfo (
@@ -73,7 +72,8 @@ CREATE TABLE CarTrim (
 
 DROP TABLE Post;
 CREATE TABLE Post (
-  postID      int(11) NOT NULL AUTO_INCREMENT, 
+  postID      int(11) NOT NULL AUTO_INCREMENT,
+  title       varchar(100) NOT NULL, 
   userName    varchar(20) NOT NULL, 
   carID       int(11) NOT NULL, 
   year        int(11) NOT NULL, 
