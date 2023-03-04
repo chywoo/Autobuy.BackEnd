@@ -12,6 +12,7 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const loginRouter = require('./routes/authentication');
 const rolesRouter = require('./routes/roles');
+const makerRouter = require('./routes/makers');
 
 
 var app = express();
@@ -31,6 +32,7 @@ app.use('/', indexRouter);
 app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/roles', rolesRouter);
 app.use('/api/v1/auth', loginRouter);
+app.use('/api/v1/makers', makerRouter);
 
 // Swagger Document
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, { explorer: true }));
