@@ -9,6 +9,44 @@ servers:
 # Define common JSON data format
 components:
   schemas:
+    CarInfo:
+      type: "object"
+      properties:
+        carID:
+          type: "integer"
+        carName:
+          type: "string"
+        maker:
+          $ref: "#/components/schemas/MakerInfo"
+
+    MakerInfo:
+      type: "object"
+      properties:
+        makerID:
+          type: "integer"
+        makerName:
+          type: "string"
+
+    PostInfo:
+      type: "object"
+      properties:
+        postID:
+          type: "integer"
+        title:
+          type: "string"
+        content:
+          type: "string"
+        year:
+          type: "integer"
+        mileage:
+          type: "integer"
+        price:
+          type: "integer"
+        author:
+          $ref: "#/components/schemas/UserInfo"
+        carInfo:
+          $ref: "#/components/schemas/CarInfo"
+
     Result:
       type: "object"
       properties:
@@ -16,23 +54,42 @@ components:
           type: "string"
         message:
           type: "string"
+
+    Role:
+      type: "object"
+      properties:
+        roleID:
+          type: "integer"
+        roleName:
+          type: "string"
+
     UserInfo:
-        type: "object"
-        properties:
-            userName:
-              type: "string"
-            password:
-              type: "string"
-            fullName:
-              type: "string"
-            email:
-              type: "string"
+      type: "object"
+      properties:
+        userName:
+          type: "string"
+        password:
+          type: "string"
+        fullName:
+          type: "string"
+        email:
+          type: "string"
+        role:
+          $ref: "#/components/schemas/Role"
 
 tags:
   - name: Auth
     description: Authentication
   - name: Users
     description: User Management
+  - name: Roles
+    description: Role Management
+  - name: Makers
+    description: Maker Management
+  - name: Cars
+    description: Car Management
+  - name: Posts
+    description: Post Management
 
 paths:
 
@@ -73,90 +130,131 @@ paths:
 
   /users/{userName}:
     get:
-        description: "Get user by userName"
-        tags: [Users]
-        parameters:
-            - name: userName
-              in: path
-              description: "userName"
-              required: true
+      description: "Get user by userName"
+      tags: [Users]
+      parameters:
+        - name: userName
+          in: path
+          description: "userName"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
               schema:
-                  type: string
-        responses:
-            "200":
-              description: "OK"
-              content:
-                application/json:
-                  schema:
-                    $ref: "#/components/schemas/UserInfo"
-            "404":
-              description: "User not found"
-            "500":
-              description: "Internal server error"
+                $ref: "#/components/schemas/UserInfo"
+        "404":
+          description: "User not found"
+        "500":
+          description: "Internal server error"
 
     put:
-        description: "Update user by userName"
-        tags: [Users]
-        parameters:
-            - name: userName
-              in: path
-              description: "userName"
-              required: true
+      description: "Update user by userName"
+      tags: [Users]
+      parameters:
+        - name: userName
+          in: path
+          description: "userName"
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserInfo"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
               schema:
-                  type: string
-        requestBody:
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/UserInfo"
-        responses:
-            "200":
-              description: "OK"
-              content:
-                application/json:
-                  schema:
-                    $ref: "#/components/schemas/UserInfo"
-            "404":
-              description: "User not found"
-              content:
-                application/json:
-                  schema:
-                    $ref: "#/components/schemas/Result"
-            "500":
-              description: "Internal server error"
-              content:
-                application/json:
-                  schema:
-                    $ref: "#/components/schemas/Result"
+                $ref: "#/components/schemas/UserInfo"
+        "404":
+          description: "User not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Result"
+        "500":
+          description: "Internal server error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Result"
     delete:
-        description: "Delete user by id"
-        tags: [Users]
-        parameters:
-            - name: userName
-              in: path
-              description: "User id"
-              required: true
+      description: "Delete user by id"
+      tags: [Users]
+      parameters:
+        - name: userName
+          in: path
+          description: "User id"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
               schema:
-                  type: string
-        responses:
-            "200":
-              description: "OK"
-              content:
-                application/json:
-                  schema:
-                    $ref: "#/components/schemas/Result"
-            "404":
-              description: "User not found"
-              content:
-                application/json:
-                  schema:
-                    $ref: "#/components/schemas/Result"
-            "500":
-              description: "Internal server error"
-              content:
-                application/json:
-                  schema:
-                    $ref: "#/components/schemas/Result"
+                $ref: "#/components/schemas/Result"
+        "404":
+          description: "User not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Result"
+        "500":
+          description: "Internal server error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Result"
+  /roles:
+    get:
+      description: "Get all roles"
+      tags: [Roles]
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Role"
+        "500":
+          description: "Internal server error"
+      security:
+        - api_key: []
+
+  /roles/{id}:
+    get:
+      description: "Get role by id"
+      tags: [Roles]
+      parameters:
+        - name: id
+          in: path
+          description: "Role id"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Role"
+        "404":
+          description: "Role not found"
+        "500":
+          description: "Internal server error"
+
   /auth:
     get:
       summary: "Acheck already login"
@@ -194,7 +292,7 @@ paths:
           description: "Internal server error"
 
   /auth/logout:
-    post:
+    get:
       summary: "User Logout"
       description: ""
       tags: [ Auth ]
@@ -203,3 +301,224 @@ paths:
           description: "OK"
         "500":
           description: "Internal server error"
+
+  /makers:
+    get:
+      description: "Get all makers"
+      tags: [Makers]
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/MakerInfo"
+        "500":
+          description: "Internal server error"
+      security:
+        - api_key: []
+
+  /makers/{id}:
+    get:
+      description: "Get maker by id"
+      tags: [Makers]
+      parameters:
+        - name: id
+          in: path
+          description: "Maker id"
+          required: true
+          schema:
+              type: integer
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MakerInfo"
+        "404":
+          description: "Maker not found"
+        "500":
+          description: "Internal server error"
+      security:
+        - api_key: []
+
+  /cars:
+    get:
+      description: "Get all cars"
+      tags: [Cars]
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/CarInfo"
+        "500":
+          description: "Internal server error"
+      security:
+        - api_key: []
+
+  /cars/{id}:
+    get:
+      description: "Get car by id"
+      tags: [Cars]
+      parameters:
+        - name: id
+          in: path
+          description: "Car id"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CarInfo"
+        "404":
+          description: "Car not found"
+        "500":
+          description: "Internal server error"
+      security:
+        - api_key: []
+
+  /posts:
+    get:
+      description: "Get all posts"
+      tags: [Posts]
+      parameters:
+        - name: userName
+          in: query
+          description: "User name"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/PostInfo"
+        "500":
+          description: "Internal server error"
+      security:
+        - api_key: []
+
+    post:
+      description: "Create a new post"
+      tags: [Posts]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostInfo"
+      responses:
+        "200":
+          description: "OK"
+        "500":
+          description: "Internal server error"
+      security:
+        - api_key: []
+
+  /posts/{id}:
+    get:
+      description: "Get post by id"
+      tags: [Posts]
+      parameters:
+        - name: id
+          in: path
+          description: "Post id"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "OK"
+          content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/PostInfo"
+        "404":
+          description: "Post not found"
+        "500":
+          description: "Internal server error"
+      security:
+        - api_key: []
+
+    put:
+      description: "Update post by id"
+      tags: [Posts]
+      parameters:
+        - name: id
+          in: path
+          description: "Post id"
+          required: true
+          schema:
+              type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostInfo"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PostInfo"
+        "404":
+          description: "Post not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Result"
+        "500":
+          description: "Internal server error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Result"
+      security:
+          - api_key: []
+
+    delete:
+      description: "Delete post by id"
+      tags: [Posts]
+      parameters:
+        - name: id
+          in: path
+          description: "Post id"
+          required: true
+          schema:
+              type: integer
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Result"
+        "404":
+          description: "Post not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Result"
+        "500":
+          description: "Internal server error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Result"
+      security:
+        - api_key: []
