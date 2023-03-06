@@ -29,6 +29,11 @@ CREATE TABLE UserInfo (
   Email    varchar(255) NOT NULL,
   RoleID   int(11) default 1);
 
+INSERT INTO autobuy.UserInfo (UserName, Password, FullName, Email, RoleID) VALUES('user', 'user', 'User', 'user@autobuy.com', 1);
+INSERT INTO autobuy.UserInfo (UserName, Password, FullName, Email, RoleID) VALUES('seller', 'seller', 'I am Seller', 'seller@autobuy.com', 2);
+INSERT INTO autobuy.UserInfo (UserName, Password, FullName, Email, RoleID) VALUES('admin', 'admin', 'Administrator', 'admin@autobuy.com', 3);
+
+
 DROP TABLE MakerInfo;
 CREATE TABLE MakerInfo (
   makerID   int(11) AUTO_INCREMENT PRIMARY KEY, 
@@ -57,6 +62,10 @@ CREATE TABLE CarInfo (
   imageURL varchar(255), 
   PRIMARY KEY (carID));
 
+INSERT INTO CarInfo (makerID, carName, imageURL) VALUES (1, 'Car1', '/images/car1.jpg');
+INSERT INTO CarInfo (makerID, carName, imageURL) VALUES (2, 'Car2', '/images/car2.jpg');
+INSERT INTO CarInfo (makerID, carName, imageURL) VALUES (2, 'Car3', '/images/car3.jpg');
+
 
 DROP TABLE CarTrim;
 CREATE TABLE CarTrim ( 
@@ -80,6 +89,10 @@ CREATE TABLE Post (
   mileage     int(11), 
   `condition` varchar(10), 
   price       int(11) NOT NULL, 
-  description int(11) NOT NULL, 
+  description text NOT NULL, 
   PRIMARY KEY (postID));
+
+INSERT INTO autobuy.Post (title, userName, carID, `year`, mileage, `condition`, price, description) VALUES('Post1', 'user', 1, 2012, 140000, '', 80000000, 'Good car');
+INSERT INTO autobuy.Post (title, userName, carID, `year`, mileage, `condition`, price, description) VALUES('Post2', 'user', 2, 2011, 140000, '', 80000000, 'Good car');
+INSERT INTO autobuy.Post (title, userName, carID, `year`, mileage, `condition`, price, description) VALUES('Post3', 'seller', 3, 2011, 140000, '', 620000000, 'Good car');
 
