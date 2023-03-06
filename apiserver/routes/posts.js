@@ -38,6 +38,8 @@ router.post('/', (req, res) => {
         if ( title === undefined
             || description === undefined
             || year === undefined
+            || mileage === undefined
+            || condition === undefined
             || price === undefined
             || carID === undefined ) {
 
@@ -150,6 +152,9 @@ router.get('/', (req, res) => {
     });
 });
 
+/**
+ * Get JSON object of post information.
+ */
 function makePostInfo(data) {
     let postInfo = {
         postID: data.postID,
@@ -241,6 +246,127 @@ router.get('/:id', (req, res) => {
                     result: result,
                     message: message
                 });
+            }
+        }
+    });
+});
+
+/**
+ * Update the specific post.
+ */
+router.put('/:id', (req, res) => {
+    let id = req.params.id;
+    let post = req.body;
+    let sql = "";
+
+    let title = post.title;
+    let description = post.description;
+    let year = post.year;
+    let mileage = post.mileage;
+    let condition = post.condition;
+    let price = post.price;
+
+    if (title === undefined || title === "") {
+        res.status(400).json({
+            result: "Error",
+            message: "title is required."
+        });
+        return;
+    }
+
+    if (description === undefined || description === "") {
+        res.status(400).json({
+            result: "Error",
+            message: "description is required."
+        });
+        return;
+    }
+
+    if (year === undefined || year === "") {
+        res.status(400).json({
+            result: "Error",
+            message: "year is required."
+        });
+        return;
+    }
+
+    if (mileage === undefined || mileage === "") {
+        res.status(400).json({
+            result: "Error",
+            message: "mileage is required."
+        });
+        return;
+    }
+
+    if (condition === undefined || condition === "") {
+        res.status(400).json({
+            result: "Error",
+            message: "condition is required."
+        });
+        return;
+    }
+
+    if (price === undefined || price === "") {
+        res.status(400).json({
+            result: "Error",
+            message: "price is required."
+        });
+        return;
+    }
+
+    try {
+        sql =
+            `UPDATE Post
+            SET 
+                title = '${post.title}',
+                description = '${post.description}',
+                year = ${post.year},
+                mileage = ${post.mileage},
+                \`condition\` = '${post.condition}',
+                price = ${post.price}
+            WHERE postID = ${id}`;
+
+        console.log(sql);
+    }
+    catch (err) {
+        console.error(err.message)
+        let result = "Error";
+        let message = err.message
+
+        // 400 Bad Request: Invalid data
+        res.status(400).json({
+            result: result,
+            message: message
+        });
+
+        return;
+    }
+
+    db.pool.query(sql, (err, data) => {
+        let result = "OK";
+        let message = "";
+
+        if (err) {
+            console.error(err.message);
+
+            switch (err.code) {
+                default:
+                    result = "Error";
+                    message = err.sqlMessage
+                    res.status(500).json({
+                        result: result,
+                        message: message
+                    });
+                    break;
+            }
+        } else {
+            if (data.affectedRows === 0) {
+                res.status(404).json({
+                    result: "NotOK",
+                    message: "The post not found."
+                });
+            } else {
+                res.status(200).json(resultOK);
             }
         }
     });
