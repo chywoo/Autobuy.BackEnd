@@ -16,6 +16,8 @@ components:
           type: "integer"
         carName:
           type: "string"
+        makerID:
+          type: "integer"
         maker:
           $ref: "#/components/schemas/MakerInfo"
 
@@ -34,7 +36,7 @@ components:
           type: "integer"
         title:
           type: "string"
-        content:
+        description:
           type: "string"
         year:
           type: "integer"
@@ -42,9 +44,13 @@ components:
           type: "integer"
         price:
           type: "integer"
+        userName:
+          type: "string"
+        carID:
+          type: "integer"
         author:
           $ref: "#/components/schemas/UserInfo"
-        carInfo:
+        car:
           $ref: "#/components/schemas/CarInfo"
 
     Result:
@@ -392,13 +398,6 @@ paths:
     get:
       description: "Get all posts"
       tags: [Posts]
-      parameters:
-        - name: userName
-          in: query
-          description: "User name"
-          required: true
-          schema:
-            type: string
       responses:
         "200":
           description: "OK"
