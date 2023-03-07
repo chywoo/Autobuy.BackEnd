@@ -89,7 +89,10 @@ router.post('/', (req, res) => {
  * Get the list of users
  */
 router.get('/', (req, res) => {
-    let sql = `SELECT * FROM UserInfo A LEFT OUTER JOIN Roles B ON (A.roleID = B.roleID) ORDER BY userName`;
+    let sql =
+        `SELECT A.*, B.roleName 
+        FROM UserInfo A LEFT OUTER JOIN Roles B ON (A.roleID = B.roleID) 
+        ORDER BY userName`;
 
     db.pool.query(sql, (err, data) => {
         if (err) {
@@ -122,7 +125,11 @@ router.get('/', (req, res) => {
                         password: "",
                         fullName: data[i].fullName,
                         email: data[i].email,
-                        roleID: data[i].roleID
+                        roleID: data[i].roleID,
+                        role: {
+                            roleID: data[i].roleID,
+                            roleName: data[i].roleName
+                        }
                     }
                     users.push(user);
                 }
@@ -147,7 +154,11 @@ router.get('/', (req, res) => {
 router.get('/:userName', (req, res) => {
     let userName = req.params.userName;
 
-    let sql = `SELECT * FROM UserInfo WHERE userName = '${userName}'`;
+    let sql =
+        `SELECT A.*, B.roleName 
+        FROM UserInfo A LEFT OUTER JOIN Roles B ON (A.roleID = B.roleID) 
+        WHERE userName = '${userName}'
+        ORDER BY userName`;
 
     db.pool.query(sql, (err, data) => {
         let result = "OK";
@@ -157,15 +168,6 @@ router.get('/:userName', (req, res) => {
             console.error(err.message);
 
             switch (err.code) {
-                case "ER_DUP_ENTRY":
-                    result = "DUPLICATED";
-                    message = "The user already exists.";
-                    res.status(200).json({
-                        result: result,
-                        message: message
-                    });
-                    break;
-
                 default:
                     result = "Error";
                     message = err.sqlMessage
@@ -190,7 +192,11 @@ router.get('/:userName', (req, res) => {
                     password: "",
                     fullName: data[0].fullName,
                     email: data[0].email,
-                    roleID: data[0].roleID
+                    roleID: data[0].roleID,
+                    role: {
+                        roleID: data[0].roleID,
+                        roleName: data[0].roleName
+                    }
                 }
                 res.status(200).json(userInfo);
             }
@@ -245,15 +251,6 @@ router.put('/:userName', (req, res) => {
             console.error(err.message);
 
             switch (err.code) {
-                case "ER_DUP_ENTRY":
-                    result = "DUPLICATED";
-                    message = "The user already exists.";
-                    res.status(200).json({
-                        result: result,
-                        message: message
-                    });
-                    break;
-
                 default:
                     result = "Error";
                     message = err.sqlMessage
