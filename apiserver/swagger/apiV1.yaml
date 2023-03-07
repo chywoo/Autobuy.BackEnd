@@ -135,12 +135,6 @@ paths:
               $ref: "#/components/schemas/UserInfo"
 
       responses:
-        default:
-          description: "Default result schema is Result."
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Result"
         "200":
           description: "OK. If the result is not OK, the message field will contain the error message."
         "201":
@@ -168,6 +162,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/UserInfo"
+        "400":
+          description: "Bad request"
         "404":
           description: "User not found"
         "500":
@@ -195,18 +191,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/UserInfo"
+        "400":
+          description: "Bad request"
         "404":
           description: "User not found"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Result"
         "500":
           description: "Internal server error"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Result"
     delete:
       description: "Delete user by id"
       tags: [Users]
@@ -220,22 +210,11 @@ paths:
       responses:
         "200":
           description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Result"
+
         "404":
           description: "User not found"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Result"
         "500":
           description: "Internal server error"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Result"
   /roles:
     get:
       description: "Get all roles"
@@ -339,8 +318,6 @@ paths:
                   $ref: "#/components/schemas/MakerInfo"
         "500":
           description: "Internal server error"
-      security:
-        - api_key: []
 
   /makers/{id}:
     get:
@@ -447,6 +424,8 @@ paths:
       responses:
         "201":
           description: "Created a new post"
+        "400":
+          description: "Post information is invalid"
         "500":
           description: "Internal server error"
       security:
@@ -501,16 +480,8 @@ paths:
                 $ref: "#/components/schemas/PostInfo"
         "404":
           description: "Post not found"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Result"
         "500":
           description: "Internal server error"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Result"
       security:
           - api_key: []
 
@@ -527,21 +498,7 @@ paths:
       responses:
         "200":
           description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Result"
         "404":
           description: "Post not found"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Result"
         "500":
           description: "Internal server error"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Result"
-      security:
-        - api_key: []
