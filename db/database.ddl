@@ -23,15 +23,15 @@ INSERT INTO Roles(roleID, roleName) VALUES ( 3, 'ADMINISTRATOR');
 DROP TABLE UserInfo;
 
 CREATE TABLE UserInfo (
-  UserName varchar(20) NOT NULL PRIMARY KEY, 
-  Password varchar(255) NOT NULL, 
-  FullName varchar(255) NOT NULL, 
-  Email    varchar(255) NOT NULL,
-  RoleID   int(11) default 1);
+  userName varchar(20) NOT NULL PRIMARY KEY, 
+  password varchar(255) NOT NULL, 
+  fullName varchar(255) NOT NULL, 
+  email    varchar(255) NOT NULL,
+  roleID   int(11) default 1);
 
-INSERT INTO autobuy.UserInfo (UserName, Password, FullName, Email, RoleID) VALUES('user', 'user', 'User', 'user@autobuy.com', 1);
-INSERT INTO autobuy.UserInfo (UserName, Password, FullName, Email, RoleID) VALUES('seller', 'seller', 'I am Seller', 'seller@autobuy.com', 2);
-INSERT INTO autobuy.UserInfo (UserName, Password, FullName, Email, RoleID) VALUES('admin', 'admin', 'Administrator', 'admin@autobuy.com', 3);
+INSERT INTO autobuy.UserInfo (userName, password, fullName, email, roleID) VALUES('user', 'user', 'User', 'user@autobuy.com', 1);
+INSERT INTO autobuy.UserInfo (userName, password, fullName, email, roleID) VALUES('seller', 'seller', 'I am Seller', 'seller@autobuy.com', 2);
+INSERT INTO autobuy.UserInfo (userName, password, fullName, email, roleID) VALUES('admin', 'admin', 'Administrator', 'admin@autobuy.com', 3);
 
 
 DROP TABLE MakerInfo;
