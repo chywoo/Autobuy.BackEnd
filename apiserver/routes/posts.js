@@ -102,7 +102,7 @@ router.get('/', (req, res) => {
     let sql =
         `SELECT A.postID, A.userName, A.carID, A.year, A.mileage, A.condition, A.price, A.description, 
                 B.FullName, B.Email, 
-                C.carID, C.makerID, C.carName, C.imageURL,
+                C.carID, C.makerID, C.carModel, C.imageURL,
                 D.makerName 
          FROM Post A 
               JOIN UserInfo B ON A.userName = B.userName
@@ -180,7 +180,7 @@ function makePostInfo(data) {
         car: {
             carID: data.carID,
             makerID: data.makerID,
-            carName: data.carName,
+            carModel: data.carModel,
             imageURL: data.imageURL,
             maker: {
                 makerID: data.makerID,
@@ -202,7 +202,7 @@ router.get('/:id', (req, res) => {
     let sql =
         `SELECT A.postID, A.userName, A.carID, A.year, A.mileage, A.condition, A.price, A.description, 
                 B.FullName, B.Email, 
-                C.carID, C.makerID, C.carName, C.imageURL,
+                C.carID, C.makerID, C.carModel, C.imageURL,
                 D.makerName 
          FROM Post A 
               JOIN UserInfo B ON A.userName = B.userName

@@ -15,7 +15,7 @@ const resultOK = {
 router.get('/', (req, res) => {
     let makerID = req.query.makerID;
     let sql =
-        "SELECT A.carID, A.makerID, A.carName, A.imageURL, B.makerName " +
+        "SELECT A.carID, A.makerID, A.carModel, A.imageURL, B.makerName " +
         "FROM CarInfo A JOIN MakerInfo B ON (A.makerID = B.makerID)";
 
     if (makerID != undefined && makerID != "") {
@@ -52,7 +52,7 @@ router.get('/', (req, res) => {
                 for (let i = 0; i < data.length; i++) {
                     let carInfo = {
                         carID: data[i].carID,
-                        carName: data[i].carName,
+                        carModel: data[i].carModel,
                         makerID: data[i].makerID,
                         imageURL: data[i].imageURL,
                         maker: {
@@ -84,7 +84,7 @@ router.get('/:id', (req, res) => {
     let id = req.params.id;
 
     let sql =
-        `SELECT A.carID, A.makerID, A.carName, A.imageURL, B.makerName 
+        `SELECT A.carID, A.makerID, A.carModel, A.imageURL, B.makerName 
          FROM CarInfo A JOIN MakerInfo B ON (A.makerID = B.makerID) 
          WHERE carID = ${id}`;
 
@@ -119,7 +119,7 @@ router.get('/:id', (req, res) => {
             try {
                 let carInfo = {
                     carID: data[0].carID,
-                    carName: data[0].carName,
+                    carModel: data[0].carModel,
                     makerID: data[0].makerID,
                     imageURL: data[0].imageURL,
                     maker: {

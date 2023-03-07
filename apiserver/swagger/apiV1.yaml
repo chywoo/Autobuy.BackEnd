@@ -14,7 +14,7 @@ components:
       properties:
         carID:
           type: "integer"
-        carName:
+        carModel:
           type: "string"
         makerID:
           type: "integer"

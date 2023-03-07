@@ -59,13 +59,13 @@ DROP TABLE CarInfo;
 CREATE TABLE CarInfo (
   carID    int(11) NOT NULL AUTO_INCREMENT, 
   makerID  int(11) NOT NULL, 
-  carName  varchar(20) NOT NULL, 
+  carModel varchar(20) NOT NULL, 
   imageURL varchar(255), 
   PRIMARY KEY (carID));
 
-INSERT INTO CarInfo (makerID, carName, imageURL) VALUES (1, 'Car1', '/images/car1.jpg');
-INSERT INTO CarInfo (makerID, carName, imageURL) VALUES (2, 'Car2', '/images/car2.jpg');
-INSERT INTO CarInfo (makerID, carName, imageURL) VALUES (2, 'Car3', '/images/car3.jpg');
+INSERT INTO CarInfo (makerID, carModel, imageURL) VALUES (1, 'Car1', '/images/car1.jpg');
+INSERT INTO CarInfo (makerID, carModel, imageURL) VALUES (2, 'Car2', '/images/car2.jpg');
+INSERT INTO CarInfo (makerID, carModel, imageURL) VALUES (2, 'Car3', '/images/car3.jpg');
 
 
 DROP TABLE CarTrim;
