@@ -52,6 +52,7 @@ INSERT INTO MakerInfo (makerName) VALUES ('Mercedes AMG');
 INSERT INTO MakerInfo (makerName) VALUES ('Nissan');
 INSERT INTO MakerInfo (makerName) VALUES ('Toyota');
 INSERT INTO MakerInfo (makerName) VALUES ('Volkswagan');
+INSERT INTO MakerInfo (makerName) VALUES ('Kia');
 
 
 DROP TABLE CarInfo;
