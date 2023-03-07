@@ -44,6 +44,8 @@ components:
           type: "integer"
         mileage:
           type: "integer"
+        condition:
+          type: "string"
         price:
           type: "integer"
         userName:

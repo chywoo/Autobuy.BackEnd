@@ -107,7 +107,8 @@ router.get('/', (req, res) => {
          FROM Post A 
               JOIN UserInfo B ON A.userName = B.userName
               JOIN CarInfo C ON A.carID = C.carID
-              JOIN MakerInfo D ON C.makerID = D.makerID`
+              JOIN MakerInfo D ON C.makerID = D.makerID
+         ORDER BY A.postID DESC`
 
     db.pool.query(sql, (err, data) => {
         if (err) {
@@ -162,6 +163,7 @@ function makePostInfo(data) {
         description: data.description,
         year: data.year,
         mileage: data.mileage,
+        condition: data.condition,
         price: data.price,
         userName: data.userName,
         carID: data.carID,
@@ -206,7 +208,8 @@ router.get('/:id', (req, res) => {
               JOIN UserInfo B ON A.userName = B.userName
               JOIN CarInfo C ON A.carID = C.carID
               JOIN MakerInfo D ON C.makerID = D.makerID
-         WHERE postID = ${id}`;
+         WHERE postID = ${id}
+         ORDER BY A.postID DESC`;
 
     db.pool.query(sql, (err, data) => {
         let result = "OK";
