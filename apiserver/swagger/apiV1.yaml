@@ -18,6 +18,8 @@ components:
           type: "string"
         makerID:
           type: "integer"
+        imageURL:
+          type: "string"
         maker:
           $ref: "#/components/schemas/MakerInfo"
 
@@ -355,6 +357,13 @@ paths:
     get:
       description: "Get all cars"
       tags: [Cars]
+      parameters:
+        - name: makerID
+          in: query
+          description: "Maker ID"
+          required: false
+          schema:
+            type: integer
       responses:
         "200":
           description: "OK"
