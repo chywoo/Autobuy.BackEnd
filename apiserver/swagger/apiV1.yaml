@@ -33,6 +33,7 @@ components:
 
     PostInfo:
       type: "object"
+      description: "When creating a new post, you don't have to set the postID, author and car fields. They are ignored."
       properties:
         postID:
           type: "integer"
@@ -84,6 +85,8 @@ components:
           type: "string"
         email:
           type: "string"
+        roleID:
+          type: "integer"
         role:
           $ref: "#/components/schemas/Role"
 
@@ -122,17 +125,26 @@ paths:
         - api_key: []
 
     post:
-      description: "Create a new user"
+      description: "Create a new user."
       tags: [Users]
       requestBody:
+        description: "When creating a new user, you don't have to set the role field. It is ignored."
         content:
           application/json:
             schema:
               $ref: "#/components/schemas/UserInfo"
 
       responses:
+        default:
+          description: "Default result schema is Result."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Result"
         "200":
-          description: "OK"
+          description: "OK. If the result is not OK, the message field will contain the error message."
+        "201":
+          description: "Created a new user"
         "400":
           description: "Invalid username/password supplied"
         "500":
@@ -294,8 +306,8 @@ paths:
                 password:
                   type: "string"
       responses:
-        "200":
-          description: "OK"
+        "201":
+          description: "Created"
         "400":
           description: "Invalid name or data"
         "500":
@@ -427,13 +439,14 @@ paths:
       description: "Create a new post"
       tags: [Posts]
       requestBody:
+        description: "When creating a new post, you don't have to set the postID, author and car fields. They are ignored."
         content:
           application/json:
             schema:
               $ref: "#/components/schemas/PostInfo"
       responses:
-        "200":
-          description: "OK"
+        "201":
+          description: "Created a new post"
         "500":
           description: "Internal server error"
       security:

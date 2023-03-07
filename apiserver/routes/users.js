@@ -45,7 +45,7 @@ router.post('/', (req, res) => {
             return;
         }
 
-        let sql = `INSERT INTO UserInfo (UserName, Password, FullName, Email) 
+        let sql = `INSERT INTO UserInfo (userName, Password, fullName, email) 
                 VALUES ( '${userName}', '${password}', '${fullName}', '${email}' )`
 
 
@@ -76,7 +76,7 @@ router.post('/', (req, res) => {
                         break;
                 }
             } else {
-                res.status(200).json({
+                res.status(201).json({
                     result: result,
                     message: message
                 });
@@ -89,7 +89,7 @@ router.post('/', (req, res) => {
  * Get the list of users
  */
 router.get('/', (req, res) => {
-    let sql = `SELECT * FROM UserInfo ORDER BY userName`;
+    let sql = `SELECT * FROM UserInfo A LEFT OUTER JOIN Roles B ON (A.roleID = B.roleID) ORDER BY userName`;
 
     db.pool.query(sql, (err, data) => {
         if (err) {
@@ -118,10 +118,11 @@ router.get('/', (req, res) => {
 
                 for (let i = 0; i < data.length; i++) {
                     let user = {
-                        userName: data[i].UserName,
+                        userName: data[i].userName,
                         password: "",
-                        fullName: data[i].FullName,
-                        email: data[i].Email
+                        fullName: data[i].fullName,
+                        email: data[i].email,
+                        roleID: data[i].roleID
                     }
                     users.push(user);
                 }
@@ -185,10 +186,11 @@ router.get('/:userName', (req, res) => {
 
             try {
                 let userInfo = {
-                    userName: data[0].UserName,
+                    userName: data[0].userName,
                     password: "",
-                    fullName: data[0].FullName,
-                    email: data[0].Email
+                    fullName: data[0].fullName,
+                    email: data[0].email,
+                    roleID: data[0].roleID
                 }
                 res.status(200).json(userInfo);
             }
@@ -217,8 +219,8 @@ router.put('/:userName', (req, res) => {
         sql =
         `UPDATE UserInfo
         SET 
-            FullName = '${userInfo.fullName}',
-            Email = '${userInfo.email}'
+            fullName = '${userInfo.fullName}',
+            email = '${userInfo.email}'
         WHERE userName = '${userName}'`;
     }
     catch (err) {

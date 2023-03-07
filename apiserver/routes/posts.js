@@ -86,7 +86,7 @@ router.post('/', (req, res) => {
                         break;
                 }
             } else {
-                res.status(200).json({
+                res.status(201).json({
                     result: result,
                     message: message
                 });
