@@ -14,7 +14,7 @@ const loginRouter = require('./routes/authentication');
 const rolesRouter = require('./routes/roles');
 const makerRouter = require('./routes/makers');
 const postRouter = require('./routes/posts');
-
+const corRouter = require('./routes/cars');
 
 var app = express();
 
@@ -35,6 +35,7 @@ app.use('/api/v1/roles', rolesRouter);
 app.use('/api/v1/auth', loginRouter);
 app.use('/api/v1/makers', makerRouter);
 app.use('/api/v1/posts', postRouter);
+app.use('/api/v1/cars', corRouter);
 
 // Swagger Document
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, { explorer: true }));
