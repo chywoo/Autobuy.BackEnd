@@ -100,7 +100,8 @@ router.post('/', (req, res) => {
  */
 router.get('/', (req, res) => {
     let sql =
-        `SELECT A.postID, A.userName, A.carID, A.year, A.mileage, A.condition, A.price, A.description, 
+        `SELECT A.postID, A.userName, A.carID, A.year, A.mileage, A.condition, 
+                A.price, A.title, A.description, 
                 B.FullName, B.Email, 
                 C.carID, C.makerID, C.carModel, C.imageURL,
                 D.makerName 
@@ -200,7 +201,8 @@ router.get('/:id', (req, res) => {
     let id = req.params.id;
 
     let sql =
-        `SELECT A.postID, A.userName, A.carID, A.year, A.mileage, A.condition, A.price, A.description, 
+        `SELECT A.postID, A.userName, A.carID, A.year, A.mileage, A.condition,  
+                A.price, A.title, A.description, 
                 B.FullName, B.Email, 
                 C.carID, C.makerID, C.carModel, C.imageURL,
                 D.makerName 
@@ -328,8 +330,6 @@ router.put('/:id', (req, res) => {
                 \`condition\` = '${post.condition}',
                 price = ${post.price}
             WHERE postID = ${id}`;
-
-        console.log(sql);
     }
     catch (err) {
         console.error(err.message)
