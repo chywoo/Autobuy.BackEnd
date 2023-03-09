@@ -16,6 +16,8 @@ const makerRouter = require('./routes/makers');
 const postRouter = require('./routes/posts');
 const corRouter = require('./routes/cars');
 
+const auth = require('./middlewares/auth');
+
 var app = express();
 
 app.use(logger('dev'));
@@ -28,6 +30,8 @@ app.use(session({
   secret: "@^%@ASDFY#9823f@",
   saveUninitialized: false
 }));
+
+app.use(auth);
 
 app.use('/', indexRouter);
 app.use('/api/v1/users', usersRouter);
