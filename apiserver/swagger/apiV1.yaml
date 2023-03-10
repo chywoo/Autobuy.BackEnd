@@ -108,6 +108,7 @@ paths:
 
   /users:
     get:
+      summary: "Get all users"
       description: "Get all users"
       tags: [Users]
       responses:
@@ -121,10 +122,9 @@ paths:
                   $ref: "#/components/schemas/UserInfo"
         "500":
           description: "Internal server error"
-      security:
-        - api_key: []
 
     post:
+      summary: "Create a new user."
       description: "Create a new user."
       tags: [Users]
       requestBody:
@@ -146,6 +146,7 @@ paths:
 
   /users/{userName}:
     get:
+      summary: "Get user by userName"
       description: "Get user by userName"
       tags: [Users]
       parameters:
@@ -170,6 +171,7 @@ paths:
           description: "Internal server error"
 
     put:
+      summary: "Update user by userName"
       description: "Update user by userName"
       tags: [Users]
       parameters:
@@ -198,6 +200,7 @@ paths:
         "500":
           description: "Internal server error"
     delete:
+      summary: "Delete user by id"
       description: "Delete user by id"
       tags: [Users]
       parameters:
@@ -210,13 +213,13 @@ paths:
       responses:
         "200":
           description: "OK"
-
         "404":
           description: "User not found"
         "500":
           description: "Internal server error"
   /roles:
     get:
+      summary: "Get all roles"
       description: "Get all roles"
       tags: [Roles]
       responses:
@@ -235,6 +238,7 @@ paths:
 
   /roles/{id}:
     get:
+      summary: "Get role by id"
       description: "Get role by id"
       tags: [Roles]
       parameters:
@@ -258,7 +262,7 @@ paths:
 
   /auth:
     get:
-      summary: "Acheck already login"
+      summary: "Check already login"
       description: ""
       tags: [ Auth ]
       responses:
@@ -305,6 +309,7 @@ paths:
 
   /makers:
     get:
+      summary: "Get all makers"
       description: "Get all makers"
       tags: [Makers]
       responses:
@@ -321,6 +326,7 @@ paths:
 
   /makers/{id}:
     get:
+      summary: "Get maker by id"
       description: "Get maker by id"
       tags: [Makers]
       parameters:
@@ -346,6 +352,7 @@ paths:
 
   /cars:
     get:
+      summary: "Get all cars"
       description: "Get all cars"
       tags: [Cars]
       parameters:
@@ -371,6 +378,7 @@ paths:
 
   /cars/{id}:
     get:
+      summary: "Get car by id"
       description: "Get car by id"
       tags: [Cars]
       parameters:
@@ -396,6 +404,7 @@ paths:
 
   /posts:
     get:
+      summary: "Get all posts"
       description: "Get all posts"
       tags: [Posts]
       responses:
@@ -413,6 +422,7 @@ paths:
         - api_key: []
 
     post:
+      summary: "Create a new post"
       description: "Create a new post"
       tags: [Posts]
       requestBody:
@@ -433,6 +443,7 @@ paths:
 
   /posts/{id}:
     get:
+      summary: "Get post by id"
       description: "Get post by id"
       tags: [Posts]
       parameters:
@@ -457,6 +468,7 @@ paths:
         - api_key: []
 
     put:
+      summary: "Update post by id"
       description: "Update post by id"
       tags: [Posts]
       parameters:
@@ -486,6 +498,7 @@ paths:
           - api_key: []
 
     delete:
+      summary: "Delete post by id"
       description: "Delete post by id"
       tags: [Posts]
       parameters:
