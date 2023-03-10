@@ -41,13 +41,13 @@ router.get('/', (req, res) => {
             if (data.length === 0) {
                 res.status(404).json({
                     result: "NotOK",
-                    message: "User not found."
+                    message: "Not found."
                 });
                 return;
             }
 
             try {
-                let users = [];
+                let cars = [];
 
                 for (let i = 0; i < data.length; i++) {
                     let carInfo = {
@@ -60,9 +60,9 @@ router.get('/', (req, res) => {
                             makerName: data[i].makerName
                         }
                     }
-                    users.push(carInfo);
+                    cars.push(carInfo);
                 }
-                res.status(200).json(users);
+                res.status(200).json(cars);
             }
             catch (err) {
                 console.error(err.message)
