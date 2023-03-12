@@ -63,9 +63,9 @@ CREATE TABLE CarInfo (
   imageURL varchar(255), 
   PRIMARY KEY (carID));
 
-INSERT INTO CarInfo (makerID, carModel, imageURL) VALUES (1, 'Car1', '/images/car1.jpg');
-INSERT INTO CarInfo (makerID, carModel, imageURL) VALUES (2, 'Car2', '/images/car2.jpg');
-INSERT INTO CarInfo (makerID, carModel, imageURL) VALUES (2, 'Car3', '/images/car3.jpg');
+INSERT INTO CarInfo (makerID, carModel, imageURL) VALUES (1, '4C', 'AlphaRomeo_4C.jpeg');
+INSERT INTO CarInfo (makerID, carModel, imageURL) VALUES (2, '3 Series', 'BMW_3series.jpeg');
+INSERT INTO CarInfo (makerID, carModel, imageURL) VALUES (3, 'Corvette', 'Chevrolet_Corvette.jpeg');
 
 
 DROP TABLE CarTrim;
@@ -93,7 +93,7 @@ CREATE TABLE Post (
   description text NOT NULL, 
   PRIMARY KEY (postID));
 
-INSERT INTO autobuy.Post (title, userName, carID, `year`, mileage, `condition`, price, description) VALUES('Post1', 'user', 1, 2012, 140000, '', 80000000, 'Good car');
-INSERT INTO autobuy.Post (title, userName, carID, `year`, mileage, `condition`, price, description) VALUES('Post2', 'user', 2, 2011, 140000, '', 80000000, 'Good car');
-INSERT INTO autobuy.Post (title, userName, carID, `year`, mileage, `condition`, price, description) VALUES('Post3', 'seller', 3, 2011, 140000, '', 620000000, 'Good car');
+INSERT INTO autobuy.Post (title, userName, carID, `year`, mileage, `condition`, price, description) VALUES('Sell AlphaRomeo 4C Convertible Sports Car', 'user', 1, 2012, 140000, '', 80000000, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.');
+INSERT INTO autobuy.Post (title, userName, carID, `year`, mileage, `condition`, price, description) VALUES('BMW 3 Sport Sedan. Silky 6 engine', 'user', 2, 2011, 140000, '', 80000000, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.');
+INSERT INTO autobuy.Post (title, userName, carID, `year`, mileage, `condition`, price, description) VALUES('It\'s corvette.', 'seller', 3, 2011, 140000, '', 620000000, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.');
 
