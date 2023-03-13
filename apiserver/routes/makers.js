@@ -10,10 +10,13 @@ const resultOK = {
 }
 
 /**
- * Get the list of makers
+ * Get the list of makers. This returns the list of makers that have at least one car.
  */
 router.get('/', (req, res) => {
-    let sql = `SELECT * FROM MakerInfo ORDER BY makerName`;
+    let sql =
+       `SELECT *  FROM MakerInfo A
+        WHERE EXISTS ( SELECT * FROM CarInfo B WHERE A.makerID = B.makerID)
+        ORDER BY makerName`;
 
     db.pool.query(sql, (err, data) => {
         if (err) {
