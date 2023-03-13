@@ -268,7 +268,7 @@ paths:
       responses:
         "200":
           description: "OK"
-        "404":
+        "401":
           description: "Not logged in"
         "500":
           description: "Internal server error"

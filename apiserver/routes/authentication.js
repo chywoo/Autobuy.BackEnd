@@ -12,8 +12,8 @@ router.get('/', (req, res) => {
             message: "Already logged in"
         });
     } else {
-        res.status(404).json({
-            result: "NotOK",
+        res.status(401).json({
+            result: "Error",
             message: "Not logged in"
         });
     }
@@ -109,7 +109,7 @@ router.post('/login', (req, res) => {
                     result = "OK";
                     req.session.islogin = true;
                 } else {
-                    result = "Failure";
+                    result = "Error";
                     message = "Wrong user name or password";
                 }
             }
