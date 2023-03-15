@@ -299,6 +299,32 @@ paths:
         "500":
           description: "Internal server error"
 
+  /roles/{id}/users:
+    get:
+      summary: "Get all users of a role"
+      description: "Get all users of a role"
+      tags: [Roles]
+      parameters:
+        - name: id
+          in: path
+          description: "Role id"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/UserInfo"
+        "404":
+          description: "Role not found"
+        "500":
+          description: "Internal server error"
+
   /auth:
     get:
       summary: "Check already login"
