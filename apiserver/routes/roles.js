@@ -128,6 +128,7 @@ router.get('/', (req, res) => {
     });
 });
 
+
 /**
  * Get the details of specific role.
  */
@@ -181,5 +182,57 @@ router.get('/:id', (req, res) => {
         }
     });
 });
+
+
+/**
+ * Delete a role.
+ */
+router.delete('/:id', (req, res) => {
+    let id = req.params.id;
+    let sql = "";
+
+    try {
+        sql = `DELETE FROM Roles WHERE roleID = '${id}'`
+    } catch (err) {
+        console.error(err.message)
+        let result = "Error";
+        let message = err.message
+
+        // 400 Bad Request: Invalid data
+        res.status(400).json({
+            result: result,
+            message: message
+        });
+
+        return;
+    }
+
+    db.pool.query(sql, (err, data) => {
+        if (err) {
+            console.error(err.message);
+
+            switch (err.code) {
+                default:
+                    let result = "Error";
+                    let message = err.sqlMessage
+                    res.status(500).json({
+                        result: result,
+                        message: message
+                    });
+                    break;
+            }
+        } else {
+            if (data.affectedRows === 0) {
+                res.status(404).json({
+                    result: "NotOK",
+                    message: "Role not found."
+                });
+            } else {
+                res.status(200).json(resultOK);
+            }
+        }
+    });
+});
+
 
 module.exports = router;

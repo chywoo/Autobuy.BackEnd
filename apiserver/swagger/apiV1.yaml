@@ -280,6 +280,24 @@ paths:
           description: "Role not found"
         "500":
           description: "Internal server error"
+    delete:
+      summary: "Delete role by id"
+      description: "Delete role by id"
+      tags: [Roles]
+      parameters:
+        - name: id
+          in: path
+          description: "Role id"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "OK"
+        "404":
+          description: "Role not found"
+        "500":
+          description: "Internal server error"
 
   /auth:
     get:
