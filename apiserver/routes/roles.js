@@ -235,7 +235,7 @@ router.delete('/:id', (req, res) => {
 });
 
 /**
- * Get the list of roles
+ * Get the list of users of a specific role.
  */
 router.get('/:id/users', (req, res) => {
     let id = req.params.id;
@@ -307,6 +307,5 @@ router.get('/:id/users', (req, res) => {
         }
     });
 });
-
 
 module.exports = router;
