@@ -13,7 +13,7 @@ USE autobuy;
 
 DROP TABLE Roles;
 CREATE TABLE Roles (
-  roleID   int(11)  PRIMARY KEY, 
+  roleID   int(11)  PRIMARY KEY AUTO_INCREMENT, 
   roleName varchar(20) NOT NULL);
 
 INSERT INTO Roles(roleID, roleName) VALUES ( 1, 'USER');

@@ -10,6 +10,72 @@ const resultOK = {
 }
 
 /**
+ * Create a role
+ */
+router.post('/', (req, res) => {
+
+    // No parameters
+    if (Object.keys(req.body).length === 0) {
+        result.result = "NotOK";
+        result.message = "No parameters";
+
+        res.status(204).json(res);
+    } else {
+        console.info(req.body)
+
+        let roleName = req.body.roleName;
+
+        // Invalid data
+        if ( roleName === undefined || roleName === "" ) {
+
+            res.status(400).json({
+                result: "Error",
+                message: "Role name is invalid."
+            });
+
+            return;
+        }
+
+        let sql = `INSERT INTO Roles (roleName) VALUES ( '${roleName}' )`
+
+        db.pool.query(sql, (err, data) => {
+            let result = "OK";
+            let message = "";
+
+            if (err) {
+                console.error(err.message);
+
+                switch (err.code) {
+                    case "ER_DUP_ENTRY":
+                        result = "DUPLICATED";
+                        message = "The role already exists.";
+                        res.status(200).json({
+                            result: result,
+                            message: message
+                        });
+                        break;
+
+                    default:
+                        result = "Error";
+                        message = err.sqlMessage
+                        res.status(500).json({
+                            result: result,
+                            message: message
+                        });
+                        break;
+                }
+            } else {
+                res.status(201).json({
+                    result: result,
+                    message: message
+                });
+            }
+        });
+    }
+});
+
+
+/**
  * Get the list of roles
  */
 router.get('/', (req, res) => {

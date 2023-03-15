@@ -217,7 +217,28 @@ paths:
           description: "User not found"
         "500":
           description: "Internal server error"
+
   /roles:
+    post:
+      summary: "Create a new role."
+      description: "Create a new role."
+      tags: [Roles]
+      requestBody:
+        description: "When creating a new role, you don't have to set the roleID field. It is ignored."
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Role"
+
+      responses:
+          "200":
+            description: "OK. If the result is not OK, the message field will contain the error message."
+          "201":
+            description: "Created a new role"
+          "400":
+            description: "Invalid role name supplied"
+          "500":
+            description: "Internal server error"
     get:
       summary: "Get all roles"
       description: "Get all roles"
