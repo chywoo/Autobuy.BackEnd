@@ -27,7 +27,9 @@ router.post('/', (req, res) => {
         console.info(req.body)
         let userName = req.body.userName;
         let title = req.body.title;
-        let description = req.body.description;
+        let description = req.body.description
+            .replaceAll("'", "\\'" )
+            .replaceAll("\"", "\\");
         let year = req.body.year;
         let mileage = req.body.mileage;
         let condition = req.body.condition;
@@ -59,6 +61,7 @@ router.post('/', (req, res) => {
             `INSERT INTO Post (title, userName, carID, \`year\`, mileage, \`condition\`, price, description)
              VALUES ( '${title}','${userName}', ${carID}, ${year}, ${mileage}, '${condition}', ${price}, '${description}' )`
 
+        console.log(sql);
         db.pool.query(sql, (err, data) => {
             let result = "OK";
             let message = "";
@@ -109,10 +112,18 @@ router.get('/', (req, res) => {
               JOIN UserInfo B ON A.userName = B.userName
               JOIN CarInfo C ON A.carID = C.carID
               JOIN MakerInfo D ON C.makerID = D.makerID
-         ORDER BY A.postID DESC`
+         ORDER BY A.postID DESC `;
+
+    let limit = req.query.limit;
+    let offset = req.query.offset;
+
+    if (limit !== undefined && offset !== undefined) {
+        sql += ` LIMIT ${offset}, ${limit} `;
+    }
 
     db.pool.query(sql, (err, data) => {
         if (err) {
+            console.error(sql)
             console.error(err.message);
             switch (err.code) {
                 default:
@@ -350,6 +361,7 @@ router.put('/:id', (req, res) => {
         let message = "";
 
         if (err) {
+            console.error(sql)
             console.error(err.message);
 
             switch (err.code) {

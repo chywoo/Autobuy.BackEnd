@@ -472,6 +472,19 @@ paths:
       summary: "Get all posts"
       description: "Get all posts"
       tags: [Posts]
+      parameters:
+        - name: offset
+          in: query
+          description: "Offset number of posts"
+          required: false
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          description: "Limit number of posts"
+          required: false
+          schema:
+            type: integer
       responses:
         "200":
           description: "OK"
