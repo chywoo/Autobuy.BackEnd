@@ -86,13 +86,14 @@ router.post('/login', (req, res) => {
             return
         }
 
-        let sql = `SELECT COUNT(*) AS Count FROM UserInfo WHERE UserName = '${userName}' AND Password = '${password}'`;
+        let sql = `SELECT COUNT(*) AS Count FROM UserInfo WHERE UserName = '${userName}' AND Password = SHA2('${password}', 256)`;
 
         db.pool.query(sql, (err, data) => {
             let result = "OK";
             let message = "";
 
             if (err) {
+                console.error(sql);
                 console.error(err.message);
 
                 switch (err.code) {
@@ -109,6 +110,7 @@ router.post('/login', (req, res) => {
                     result = "OK";
                     req.session.islogin = true;
                 } else {
+                    console.error(sql);
                     result = "Error";
                     message = "Wrong user name or password";
                 }
