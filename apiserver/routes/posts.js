@@ -100,26 +100,55 @@ router.post('/', (req, res) => {
 
 /**
  * Get the list of posts
+ *
+ * @param offset
+ * @param limit
+ * @returns {Array}
  */
 router.get('/', (req, res) => {
+    let pageSize = req.query.pageSize;
+    let page = req.query.page;
+    let userNameQuery = "";
+    let dbOffset = 0;
+    let dbLimit = 10;
+
+    if (pageSize === undefined) {
+        pageSize = 10;
+    }
+
+    if (page === undefined || page < 1 ) {
+        page = 1;
+    }
+
+    dbOffset = (page - 1) * pageSize;
+    dbLimit = pageSize;
+
+    if (req.query.userName != undefined) {
+        userNameQuery = ` AND A.userName = '${req.query.userName}'`;
+    }
+
     let sql =
-        `SELECT A.postID, A.userName, A.carID, A.year, A.mileage, A.condition, 
+        `
+        SELECT COUNT(*)
+        FROM Post A 
+             JOIN UserInfo B ON A.userName = B.userName
+             JOIN CarInfo C ON A.carID = C.carID
+             JOIN MakerInfo D ON C.makerID = D.makerID
+        WHERE 1 = 1 
+             ${userNameQuery};
+        SELECT A.postID, A.userName, A.carID, A.year, A.mileage, A.condition, 
                 A.price, A.title, A.description, 
                 B.FullName, B.Email, 
                 C.carID, C.makerID, C.carModel, C.imageURL,
                 D.makerName 
-         FROM Post A 
-              JOIN UserInfo B ON A.userName = B.userName
-              JOIN CarInfo C ON A.carID = C.carID
-              JOIN MakerInfo D ON C.makerID = D.makerID
-         ORDER BY A.postID DESC `;
-
-    let limit = req.query.limit;
-    let offset = req.query.offset;
-
-    if (limit !== undefined && offset !== undefined) {
-        sql += ` LIMIT ${offset}, ${limit} `;
-    }
+        FROM Post A 
+             JOIN UserInfo B ON A.userName = B.userName
+             JOIN CarInfo C ON A.carID = C.carID
+             JOIN MakerInfo D ON C.makerID = D.makerID
+        WHERE 1 = 1 
+             ${userNameQuery}
+        ORDER BY A.postID DESC
+        LIMIT ${dbOffset }, ${dbLimit}`;
 
     db.pool.query(sql, (err, data) => {
         if (err) {
@@ -136,7 +165,8 @@ router.get('/', (req, res) => {
                     break;
             }
         } else {
-            if (data.length === 0) {
+            if (data[1].length === 0) {
+                console.log(sql);
                 res.status(404).json({
                     result: "NotOK",
                     message: "post not found."
@@ -145,12 +175,22 @@ router.get('/', (req, res) => {
             }
 
             try {
+                let numPosts = data[0][0]["COUNT(*)"];
+
                 let posts = [];
 
-                for (let i = 0; i < data.length; i++) {
-                    posts.push(makePostInfo(data[i]));
+                for (let i = 0; i < data[1].length; i++) {
+                    posts.push(makePostInfo(data[1][i]));
                 }
-                res.status(200).json(posts);
+
+                let postList = {
+                    total: numPosts,
+                    pageSize: pageSize,
+                    page: page,
+                    posts: posts
+                }
+
+                res.status(200).json(postList);
             }
             catch (err) {
                 console.error(err.message)

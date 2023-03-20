@@ -58,6 +58,20 @@ components:
         car:
           $ref: "#/components/schemas/CarInfo"
 
+    PostList:
+        type: "object"
+        properties:
+            total:
+              type: "integer"
+            pageSize:
+              type: "integer"
+            page:
+              type: "integer"
+            posts:
+              type: "array"
+              items:
+                $ref: "#/components/schemas/PostInfo"
+
     Result:
       type: "object"
       properties:
@@ -473,27 +487,33 @@ paths:
       description: "Get all posts"
       tags: [Posts]
       parameters:
-        - name: offset
+        - name: pageSize
           in: query
-          description: "Offset number of posts"
+          description: "number of posts per page, Default is 10."
           required: false
           schema:
             type: integer
-        - name: limit
+        - name: page
           in: query
-          description: "Limit number of posts"
+          description: "page number, Default is 1."
           required: false
           schema:
             type: integer
+        - name: userName
+          in: query
+          description: "User name"
+          required: false
+          schema:
+              type: string
       responses:
         "200":
           description: "OK"
           content:
             application/json:
               schema:
-                type: "array"
+                type: "object"
                 items:
-                  $ref: "#/components/schemas/PostInfo"
+                  $ref: "#/components/schemas/PostList"
         "500":
           description: "Internal server error"
       security:
