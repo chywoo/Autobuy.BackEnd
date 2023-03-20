@@ -4,6 +4,7 @@
     "user": "capstone",
     "password": "capstone2023",
     "database": "autobuy",
-    "connectionLimit": 4
+    "connectionLimit": 4,
+    "multipleStatements": true
   }
 }
