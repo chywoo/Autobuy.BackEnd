@@ -16,19 +16,19 @@ components:
           type: "integer"
         carModel:
           type: "string"
-        makerID:
+        makeID:
           type: "integer"
         imageURL:
           type: "string"
-        maker:
-          $ref: "#/components/schemas/MakerInfo"
+        make:
+          $ref: "#/components/schemas/MakeInfo"
 
-    MakerInfo:
+    MakeInfo:
       type: "object"
       properties:
-        makerID:
+        makeID:
           type: "integer"
-        makerName:
+        makeName:
           type: "string"
 
     PostInfo:
@@ -111,8 +111,8 @@ tags:
     description: User Management
   - name: Roles
     description: Role Management
-  - name: Makers
-    description: Maker Management
+  - name: Makes
+    description: Make Management
   - name: Cars
     description: Car Management
   - name: Posts
@@ -379,18 +379,18 @@ paths:
     get:
       summary: "User Logout"
       description: ""
-      tags: [ Auth ]
+      tags: [Auth]
       responses:
         "200":
           description: "OK"
         "500":
           description: "Internal server error"
 
-  /makers:
+  /makes:
     get:
-      summary: "Get all makers"
-      description: "Get all makers"
-      tags: [Makers]
+      summary: "Get all makes"
+      description: "Get all makes"
+      tags: [Makes]
       responses:
         "200":
           description: "OK"
@@ -399,19 +399,19 @@ paths:
               schema:
                 type: "array"
                 items:
-                  $ref: "#/components/schemas/MakerInfo"
+                  $ref: "#/components/schemas/MakeInfo"
         "500":
           description: "Internal server error"
 
-  /makers/{id}:
+  /makes/{id}:
     get:
-      summary: "Get maker by id"
-      description: "Get maker by id"
-      tags: [Makers]
+      summary: "Get make by id"
+      description: "Get make by id"
+      tags: [Makes]
       parameters:
         - name: id
           in: path
-          description: "Maker id"
+          description: "Make id"
           required: true
           schema:
               type: integer
@@ -421,9 +421,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/MakerInfo"
+                $ref: "#/components/schemas/MakeInfo"
         "404":
-          description: "Maker not found"
+          description: "Make not found"
         "500":
           description: "Internal server error"
       security:
@@ -435,9 +435,9 @@ paths:
       description: "Get all cars"
       tags: [Cars]
       parameters:
-        - name: makerID
+        - name: makeID
           in: query
-          description: "Maker ID"
+          description: "Make ID"
           required: false
           schema:
             type: integer

@@ -128,9 +128,9 @@ router.get('/', (req, res) => {
         filterQuery += ` AND A.userName = '${req.query.userName}'`;
     }
 
-    // filter by makerID
+    // filter by makeID
     if (req.query.makeID != undefined) {
-        filterQuery += ` AND C.makerID = '${req.query.makerID}'`;
+        filterQuery += ` AND C.makeID = '${req.query.makeID}'`;
     }
 
     // filter by maxPrice
@@ -149,18 +149,18 @@ router.get('/', (req, res) => {
         FROM Post A 
              JOIN UserInfo B ON A.userName = B.userName
              JOIN CarInfo C ON A.carID = C.carID
-             JOIN MakerInfo D ON C.makerID = D.makerID
+             JOIN MakeInfo D ON C.makeID = D.makeID
         WHERE 1 = 1 
              ${filterQuery};
         SELECT A.postID, A.userName, A.carID, A.year, A.mileage, A.condition, 
                 A.price, A.title, A.description, 
                 B.FullName, B.Email, 
-                C.carID, C.makerID, C.carModel, C.imageURL,
+                C.carID, C.makeID, C.carModel, C.imageURL,
                 D.makerName 
         FROM Post A 
              JOIN UserInfo B ON A.userName = B.userName
              JOIN CarInfo C ON A.carID = C.carID
-             JOIN MakerInfo D ON C.makerID = D.makerID
+             JOIN MakeInfo D ON C.makeID = D.makeID
         WHERE 1 = 1 
              ${filterQuery}
         ORDER BY A.postID DESC
@@ -247,11 +247,11 @@ function makePostInfo(data) {
         },
         car: {
             carID: data.carID,
-            makerID: data.makerID,
+            makeID: data.makeID,
             carModel: data.carModel,
             imageURL: data.imageURL,
             maker: {
-                makerID: data.makerID,
+                makeID: data.makeID,
                 makerName: data.makerName
             }
         }
@@ -271,12 +271,12 @@ router.get('/:id', (req, res) => {
         `SELECT A.postID, A.userName, A.carID, A.year, A.mileage, A.condition,  
                 A.price, A.title, A.description, 
                 B.FullName, B.Email, 
-                C.carID, C.makerID, C.carModel, C.imageURL,
+                C.carID, C.makeID, C.carModel, C.imageURL,
                 D.makerName 
          FROM Post A 
               JOIN UserInfo B ON A.userName = B.userName
               JOIN CarInfo C ON A.carID = C.carID
-              JOIN MakerInfo D ON C.makerID = D.makerID
+              JOIN MakeInfo D ON C.makeID = D.makeID
          WHERE postID = ${id}
          ORDER BY A.postID DESC`;
 

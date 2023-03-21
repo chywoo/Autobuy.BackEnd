@@ -13,13 +13,13 @@ const resultOK = {
  * Get the list of cars
  */
 router.get('/', (req, res) => {
-    let makerID = req.query.makerID;
+    let makeID = req.query.makeID;
     let sql =
-        "SELECT A.carID, A.makerID, A.carModel, A.imageURL, B.makerName " +
-        "FROM CarInfo A JOIN MakerInfo B ON (A.makerID = B.makerID)";
+        "SELECT A.carID, A.makeID, A.carModel, A.imageURL, B.makerName " +
+        "FROM CarInfo A JOIN MakeInfo B ON (A.makeID = B.makeID)";
 
-    if (makerID != undefined && makerID != "") {
-        sql = `${sql} WHERE A.makerID = ${makerID}`;
+    if (makeID != undefined && makeID != "") {
+        sql = `${sql} WHERE A.makeID = ${makeID}`;
     }
 
     sql = `${sql} ORDER BY makerName`;
@@ -53,10 +53,10 @@ router.get('/', (req, res) => {
                     let carInfo = {
                         carID: data[i].carID,
                         carModel: data[i].carModel,
-                        makerID: data[i].makerID,
+                        makeID: data[i].makeID,
                         imageURL: data[i].imageURL,
                         maker: {
-                            makerID: data[i].makerID,
+                            makeID: data[i].makeID,
                             makerName: data[i].makerName
                         }
                     }
@@ -84,8 +84,8 @@ router.get('/:id', (req, res) => {
     let id = req.params.id;
 
     let sql =
-        `SELECT A.carID, A.makerID, A.carModel, A.imageURL, B.makerName 
-         FROM CarInfo A JOIN MakerInfo B ON (A.makerID = B.makerID) 
+        `SELECT A.carID, A.makeID, A.carModel, A.imageURL, B.makerName 
+         FROM CarInfo A JOIN MakeInfo B ON (A.makeID = B.makeID) 
          WHERE carID = ${id}`;
 
     console.log(sql);
@@ -120,10 +120,10 @@ router.get('/:id', (req, res) => {
                 let carInfo = {
                     carID: data[0].carID,
                     carModel: data[0].carModel,
-                    makerID: data[0].makerID,
+                    makeID: data[0].makeID,
                     imageURL: data[0].imageURL,
                     maker: {
-                        makerID: data[0].makerID,
+                        makeID: data[0].makeID,
                         makerName: data[0].makerName
                     }
                 }

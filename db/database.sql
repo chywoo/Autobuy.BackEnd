@@ -16,9 +16,10 @@ CREATE TABLE Roles (
   roleID   int(11)  PRIMARY KEY AUTO_INCREMENT, 
   roleName varchar(20) NOT NULL);
 
-INSERT INTO Roles(roleID, roleName) VALUES ( 1, 'USER');
-INSERT INTO Roles(roleID, roleName) VALUES ( 2, 'SELLER');
-INSERT INTO Roles(roleID, roleName) VALUES ( 3, 'ADMINISTRATOR');
+INSERT INTO Roles(roleID, roleName) VALUES 
+( 1, 'USER'),
+( 2, 'SELLER'),
+( 3, 'ADMINISTRATOR');
 
 DROP TABLE UserInfo;
 
@@ -29,54 +30,56 @@ CREATE TABLE UserInfo (
   email    varchar(255) NOT NULL,
   roleID   int(11) default 1);
 
-INSERT INTO autobuy.UserInfo (userName, password, fullName, email, roleID) VALUES('user',   SHA2('user',   256), 'User', 'user@autobuy.com', 1);
-INSERT INTO autobuy.UserInfo (userName, password, fullName, email, roleID) VALUES('seller', SHA2('seller', 256), 'I am Seller', 'seller@autobuy.com', 2);
-INSERT INTO autobuy.UserInfo (userName, password, fullName, email, roleID) VALUES('admin',  SHA2('admin',  256), 'Administrator', 'admin@autobuy.com', 3);
+INSERT INTO autobuy.UserInfo (userName, password, fullName, email, roleID) VALUES
+('user',   SHA2('user',   256), 'User', 'user@autobuy.com', 1),
+('seller', SHA2('seller', 256), 'I am Seller', 'seller@autobuy.com', 2),
+('admin',  SHA2('admin',  256), 'Administrator', 'admin@autobuy.com', 3);
 
 
-DROP TABLE MakerInfo;
-CREATE TABLE MakerInfo (
-  makerID   int(11) AUTO_INCREMENT PRIMARY KEY, 
+DROP TABLE MakeInfo;
+CREATE TABLE MakeInfo (
+  makeID   int(11) AUTO_INCREMENT PRIMARY KEY, 
   makerName varchar(20));
 
-INSERT INTO MakerInfo (makerName) VALUES ('Alpha Romeo'); -- 1
-INSERT INTO MakerInfo (makerName) VALUES ('BMW');         -- 2
-INSERT INTO MakerInfo (makerName) VALUES ('Chevrolet');   -- 3
-INSERT INTO MakerInfo (makerName) VALUES ('Ford');        -- 4
-INSERT INTO MakerInfo (makerName) VALUES ('Genesis');     -- 5
-INSERT INTO MakerInfo (makerName) VALUES ('Honda');       -- 6
-INSERT INTO MakerInfo (makerName) VALUES ('Hyundai');     -- 7
-INSERT INTO MakerInfo (makerName) VALUES ('Lamborghini'); -- 8
-INSERT INTO MakerInfo (makerName) VALUES ('Lexus');       -- 9
-INSERT INTO MakerInfo (makerName) VALUES ('Mercedes AMG');-- 10
-INSERT INTO MakerInfo (makerName) VALUES ('Nissan');      -- 11
-INSERT INTO MakerInfo (makerName) VALUES ('Toyota');      -- 12
-INSERT INTO MakerInfo (makerName) VALUES ('Volkswagan');  -- 13
-INSERT INTO MakerInfo (makerName) VALUES ('Kia');         -- 14
+INSERT INTO MakeInfo (makerName) VALUES ('Alpha Romeo'); -- 1
+INSERT INTO MakeInfo (makerName) VALUES ('BMW');         -- 2
+INSERT INTO MakeInfo (makerName) VALUES ('Chevrolet');   -- 3
+INSERT INTO MakeInfo (makerName) VALUES ('Ford');        -- 4
+INSERT INTO MakeInfo (makerName) VALUES ('Genesis');     -- 5
+INSERT INTO MakeInfo (makerName) VALUES ('Honda');       -- 6
+INSERT INTO MakeInfo (makerName) VALUES ('Hyundai');     -- 7
+INSERT INTO MakeInfo (makerName) VALUES ('Lamborghini'); -- 8
+INSERT INTO MakeInfo (makerName) VALUES ('Lexus');       -- 9
+INSERT INTO MakeInfo (makerName) VALUES ('Mercedes AMG');-- 10
+INSERT INTO MakeInfo (makerName) VALUES ('Nissan');      -- 11
+INSERT INTO MakeInfo (makerName) VALUES ('Toyota');      -- 12
+INSERT INTO MakeInfo (makerName) VALUES ('Volkswagan');  -- 13
+INSERT INTO MakeInfo (makerName) VALUES ('Kia');         -- 14
 
 
 DROP TABLE CarInfo;
 CREATE TABLE CarInfo (
   carID    int(11) NOT NULL AUTO_INCREMENT, 
-  makerID  int(11) NOT NULL, 
+  makeID  int(11) NOT NULL, 
   carModel varchar(20) NOT NULL, 
   imageURL varchar(255), 
   PRIMARY KEY (carID));
 
-INSERT INTO CarInfo (makerID, carModel, imageURL) VALUES (1, '4C', 'AlphaRomeo_4C.jpeg');
-INSERT INTO CarInfo (makerID, carModel, imageURL) VALUES (2, '3 Series', 'BMW_3series.jpeg');
-INSERT INTO CarInfo (makerID, carModel, imageURL) VALUES (3, 'Corvette', 'Chevrolet_Corvette.jpeg');
-INSERT INTO CarInfo (makerID, carModel, imageURL) VALUES (4, 'F150', 'Ford_F150.jpeg');
-INSERT INTO CarInfo (makerID, carModel, imageURL) VALUES (5, 'G80', 'Genesis_G80.jpeg');
-INSERT INTO CarInfo (makerID, carModel, imageURL) VALUES (6, 'Civic', 'Honda_Civic.jpeg');
-INSERT INTO CarInfo (makerID, carModel, imageURL) VALUES (7, 'Tucson', 'Hyundai_Tucson.jpeg');
-INSERT INTO CarInfo (makerID, carModel, imageURL) VALUES (7, 'Casper', 'Hyundai_Casper.jpeg');
-INSERT INTO CarInfo (makerID, carModel, imageURL) VALUES (8, 'Huracán', 'Lamborghini_Huracán.jpeg');
-INSERT INTO CarInfo (makerID, carModel, imageURL) VALUES (9, 'Rx350', 'Lexus_Rx350.jpeg');
-INSERT INTO CarInfo (makerID, carModel, imageURL) VALUES (10, 'AMG GT', 'MercedesAMG_GT.jpeg');
-INSERT INTO CarInfo (makerID, carModel, imageURL) VALUES (11, 'Maxima', 'Nissan_Maxima.jpeg');
-INSERT INTO CarInfo (makerID, carModel, imageURL) VALUES (12, 'Corolla', 'Toyota_Corolla.jpeg');
-INSERT INTO CarInfo (makerID, carModel, imageURL) VALUES (13, 'Microbus', 'Volkswagan_Microbus.jpeg');
+INSERT INTO CarInfo (makeID, carModel, imageURL) VALUES 
+(1, '4C', 'AlphaRomeo_4C.jpeg'),
+(2, '3 Series', 'BMW_3series.jpeg'),
+(3, 'Corvette', 'Chevrolet_Corvette.jpeg'),
+(4, 'F150', 'Ford_F150.jpeg'),
+(5, 'G80', 'Genesis_G80.jpeg'),
+(6, 'Civic', 'Honda_Civic.jpeg'),
+(7, 'Tucson', 'Hyundai_Tucson.jpeg'),
+(7, 'Casper', 'Hyundai_Casper.jpeg'),
+(8, 'Huracán', 'Lamborghini_Huracán.jpeg'),
+(9, 'Rx350', 'Lexus_Rx350.jpeg'),
+(10, 'AMG GT', 'MercedesAMG_GT.jpeg'),
+(11, 'Maxima', 'Nissan_Maxima.jpeg'),
+(12, 'Corolla', 'Toyota_Corolla.jpeg'),
+(13, 'Microbus', 'Volkswagan_Microbus.jpeg');
 
 
 
@@ -106,10 +109,11 @@ CREATE TABLE Post (
   description text NOT NULL, 
   PRIMARY KEY (postID));
 
-INSERT INTO autobuy.Post (title, userName, carID, `year`, mileage, `condition`, price, description) VALUES('Sell AlphaRomeo 4C Convertible Sports Car', 'user', 1, 2012, 140000, '', 80000000, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.');
-INSERT INTO autobuy.Post (title, userName, carID, `year`, mileage, `condition`, price, description) VALUES('BMW 3 Sport Sedan. Silky 6 engine', 'user', 2, 2011, 140000, '', 80000000, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.');
-INSERT INTO autobuy.Post (title, userName, carID, `year`, mileage, `condition`, price, description) VALUES('It\'s corvette.', 'seller', 3, 2011, 140000, '', 620000000, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.');
-INSERT INTO autobuy.Post (title, userName, carID, `year`, mileage, `condition`, price, description) VALUES('Do you want a truck?', 'seller', 4, 2011, 140000, '', 620000000, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.');
+INSERT INTO autobuy.Post (title, userName, carID, `year`, mileage, `condition`, price, description) VALUES
+('Sell AlphaRomeo 4C Convertible Sports Car', 'user', 1, 2012, 140000, '', 80000000, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'),
+('BMW 3 Sport Sedan. Silky 6 engine', 'user', 2, 2011, 140000, '', 80000000, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'),
+('It\'s corvette.', 'seller', 3, 2011, 140000, '', 620000000, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'),
+('Do you want a truck?', 'seller', 4, 2011, 140000, '', 620000000, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.');
 
 
 

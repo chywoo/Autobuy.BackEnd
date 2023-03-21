@@ -10,12 +10,12 @@ const resultOK = {
 }
 
 /**
- * Get the list of makers. This returns the list of makers that have at least one car.
+ * Get the list of makes. This returns the list of makes that have at least one car.
  */
 router.get('/', (req, res) => {
     let sql =
-       `SELECT *  FROM MakerInfo A
-        WHERE EXISTS ( SELECT * FROM CarInfo B WHERE A.makerID = B.makerID)
+       `SELECT *  FROM MakeInfo A
+        WHERE EXISTS ( SELECT * FROM CarInfo B WHERE A.makeID = B.makeID)
         ORDER BY makerName`;
 
     db.pool.query(sql, (err, data) => {
@@ -44,11 +44,11 @@ router.get('/', (req, res) => {
                 let users = [];
 
                 for (let i = 0; i < data.length; i++) {
-                    let makerInfo = {
-                        makerID: data[i].makerID,
+                    let MakeInfo = {
+                        makeID: data[i].makeID,
                         makerName: data[i].makerName
                     }
-                    users.push(makerInfo);
+                    users.push(MakeInfo);
                 }
                 res.status(200).json(users);
             }
@@ -71,7 +71,7 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) => {
     let id = req.params.id;
 
-    let sql = `SELECT * FROM MakerInfo WHERE makerID = '${id}'`;
+    let sql = `SELECT * FROM MakeInfo WHERE makeID = '${id}'`;
 
     db.pool.query(sql, (err, data) => {
         let result = "OK";
@@ -100,11 +100,11 @@ router.get('/:id', (req, res) => {
             }
 
             try {
-                let makerInfo = {
-                    makerID: data[0].makerID,
+                let MakeInfo = {
+                    makeID: data[0].makeID,
                     makerName: data[0].makerName
                 }
-                res.status(200).json(makerInfo);
+                res.status(200).json(MakeInfo);
             }
             catch (err) {
                 console.error(err.message)
