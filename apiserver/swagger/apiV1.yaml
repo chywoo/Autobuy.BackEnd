@@ -504,7 +504,31 @@ paths:
           description: "User name"
           required: false
           schema:
-              type: string
+            type: string
+        - name: makeID
+          in: query
+          description: "Make ID"
+          required: false
+          schema:
+            type: integer
+        - name: carID
+          in: query
+          description: "Car ID"
+          required: false
+          schema:
+            type: integer
+        - name: maxPrice
+          in: query
+          description: "Max price"
+          required: false
+          schema:
+            type: integer
+        - name: maxYear
+          in: query
+          description: "Max year"
+          required: false
+          schema:
+            type: integer
       responses:
         "200":
           description: "OK"

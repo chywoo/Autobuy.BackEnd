@@ -108,7 +108,7 @@ router.post('/', (req, res) => {
 router.get('/', (req, res) => {
     let pageSize = req.query.pageSize;
     let page = req.query.page;
-    let userNameQuery = "";
+    let filterQuery = "";
     let dbOffset = 0;
     let dbLimit = 10;
 
@@ -123,8 +123,24 @@ router.get('/', (req, res) => {
     dbOffset = (page - 1) * pageSize;
     dbLimit = pageSize;
 
+    // filter by userName
     if (req.query.userName != undefined) {
-        userNameQuery = ` AND A.userName = '${req.query.userName}'`;
+        filterQuery += ` AND A.userName = '${req.query.userName}'`;
+    }
+
+    // filter by makerID
+    if (req.query.makeID != undefined) {
+        filterQuery += ` AND C.makerID = '${req.query.makerID}'`;
+    }
+
+    // filter by maxPrice
+    if (req.query.maxPrice != undefined) {
+        filterQuery += ` AND A.price <= ${req.query.maxPrice}`;
+    }
+
+    // filter by minYear
+    if (req.query.minYear != undefined) {
+        filterQuery += ` AND A.year >= ${req.query.minYear}`;
     }
 
     let sql =
@@ -135,7 +151,7 @@ router.get('/', (req, res) => {
              JOIN CarInfo C ON A.carID = C.carID
              JOIN MakerInfo D ON C.makerID = D.makerID
         WHERE 1 = 1 
-             ${userNameQuery};
+             ${filterQuery};
         SELECT A.postID, A.userName, A.carID, A.year, A.mileage, A.condition, 
                 A.price, A.title, A.description, 
                 B.FullName, B.Email, 
@@ -146,7 +162,7 @@ router.get('/', (req, res) => {
              JOIN CarInfo C ON A.carID = C.carID
              JOIN MakerInfo D ON C.makerID = D.makerID
         WHERE 1 = 1 
-             ${userNameQuery}
+             ${filterQuery}
         ORDER BY A.postID DESC
         LIMIT ${dbOffset }, ${dbLimit}`;
 
