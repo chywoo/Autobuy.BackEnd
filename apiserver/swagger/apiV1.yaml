@@ -495,7 +495,7 @@ paths:
             type: integer
         - name: page
           in: query
-          description: "page number, Default is 1."
+          description: "page number, Default is 0."
           required: false
           schema:
             type: integer

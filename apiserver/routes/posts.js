@@ -116,11 +116,11 @@ router.get('/', (req, res) => {
         pageSize = 10;
     }
 
-    if (page === undefined || page < 1 ) {
-        page = 1;
+    if (page === undefined || page < 0 ) {
+        page = 0;
     }
 
-    dbOffset = (page - 1) * pageSize;
+    dbOffset = page * pageSize;
     dbLimit = pageSize;
 
     // filter by userName
