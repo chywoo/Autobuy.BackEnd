@@ -94,6 +94,15 @@ router.get('/', (req, res) => {
         FROM UserInfo A LEFT OUTER JOIN Roles B ON (A.roleID = B.roleID) 
         ORDER BY userName`;
 
+    // Check if the user is admin
+    if (req.session.roleID != 3) {
+        res.status(403).json({
+            result: "Error",
+            message: "You are not authorized to access this page."
+        });
+        return;
+    }
+
     db.pool.query(sql, (err, data) => {
         if (err) {
             console.error(err.message);
