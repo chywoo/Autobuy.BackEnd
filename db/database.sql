@@ -39,22 +39,22 @@ INSERT INTO autobuy.UserInfo (userName, password, fullName, email, roleID) VALUE
 DROP TABLE MakeInfo;
 CREATE TABLE MakeInfo (
   makeID   int(11) AUTO_INCREMENT PRIMARY KEY, 
-  makerName varchar(20));
+  makeName varchar(20));
 
-INSERT INTO MakeInfo (makerName) VALUES ('Alpha Romeo'); -- 1
-INSERT INTO MakeInfo (makerName) VALUES ('BMW');         -- 2
-INSERT INTO MakeInfo (makerName) VALUES ('Chevrolet');   -- 3
-INSERT INTO MakeInfo (makerName) VALUES ('Ford');        -- 4
-INSERT INTO MakeInfo (makerName) VALUES ('Genesis');     -- 5
-INSERT INTO MakeInfo (makerName) VALUES ('Honda');       -- 6
-INSERT INTO MakeInfo (makerName) VALUES ('Hyundai');     -- 7
-INSERT INTO MakeInfo (makerName) VALUES ('Lamborghini'); -- 8
-INSERT INTO MakeInfo (makerName) VALUES ('Lexus');       -- 9
-INSERT INTO MakeInfo (makerName) VALUES ('Mercedes AMG');-- 10
-INSERT INTO MakeInfo (makerName) VALUES ('Nissan');      -- 11
-INSERT INTO MakeInfo (makerName) VALUES ('Toyota');      -- 12
-INSERT INTO MakeInfo (makerName) VALUES ('Volkswagan');  -- 13
-INSERT INTO MakeInfo (makerName) VALUES ('Kia');         -- 14
+INSERT INTO MakeInfo (makeName) VALUES ('Alpha Romeo'); -- 1
+INSERT INTO MakeInfo (makeName) VALUES ('BMW');         -- 2
+INSERT INTO MakeInfo (makeName) VALUES ('Chevrolet');   -- 3
+INSERT INTO MakeInfo (makeName) VALUES ('Ford');        -- 4
+INSERT INTO MakeInfo (makeName) VALUES ('Genesis');     -- 5
+INSERT INTO MakeInfo (makeName) VALUES ('Honda');       -- 6
+INSERT INTO MakeInfo (makeName) VALUES ('Hyundai');     -- 7
+INSERT INTO MakeInfo (makeName) VALUES ('Lamborghini'); -- 8
+INSERT INTO MakeInfo (makeName) VALUES ('Lexus');       -- 9
+INSERT INTO MakeInfo (makeName) VALUES ('Mercedes AMG');-- 10
+INSERT INTO MakeInfo (makeName) VALUES ('Nissan');      -- 11
+INSERT INTO MakeInfo (makeName) VALUES ('Toyota');      -- 12
+INSERT INTO MakeInfo (makeName) VALUES ('Volkswagan');  -- 13
+INSERT INTO MakeInfo (makeName) VALUES ('Kia');         -- 14
 
 
 DROP TABLE CarInfo;
@@ -89,12 +89,29 @@ CREATE TABLE CarTrim (
   trimID       int(11) NOT NULL AUTO_INCREMENT, 
   carID        int(11), 
   displacement int(11), 
-  weelbase     int(11), 
+  wheelbase     int(11), 
   length       int(11), 
   width        int(11), 
   height       int(11), 
-  power        int(11), 
   PRIMARY KEY (trimID));
+
+INSERT INTO CarTrim 
+(carID, displacement,wheelbase, length, width, height)
+VALUES
+(1, 1750, 2380, 3989, 2090, 1183),
+(2, 3000, 2810, 4624, 1811, 1429),
+(3, 1750, 3989, 2090, 1183, 1429),
+(4, 1750, 3989, 2090, 1183, 1429),
+(5, 1750, 3989, 2090, 1183, 1429),
+(6, 1750, 3989, 2090, 1183, 1429),
+(7, 1750, 3989, 2090, 1183, 1429),
+(8, 1750, 3989, 2090, 1183, 1429),
+(9, 1750, 3989, 2090, 1183, 1429),
+(10, 1750, 3989, 2090, 1183, 240),
+(11, 1750, 3989, 2090, 1183, 1429),
+(12, 1750, 3989, 2090, 1183, 1429),
+(13, 1750, 3989, 2090, 1183, 1429);
+
 
 DROP TABLE Post;
 CREATE TABLE Post (

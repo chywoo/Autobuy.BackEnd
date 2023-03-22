@@ -12,7 +12,7 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const loginRouter = require('./routes/authentication');
 const rolesRouter = require('./routes/roles');
-const makerRouter = require('./routes/makes');
+const makesRouter = require('./routes/makes');
 const postRouter = require('./routes/posts');
 const corRouter = require('./routes/cars');
 
@@ -33,7 +33,7 @@ app.use('/', indexRouter);
 app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/roles', rolesRouter);
 app.use('/api/v1/auth', loginRouter);
-app.use('/api/v1/makes', makerRouter);
+app.use('/api/v1/makes', makesRouter);
 app.use('/api/v1/posts', postRouter);
 app.use('/api/v1/cars', corRouter);
 

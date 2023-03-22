@@ -16,7 +16,7 @@ router.get('/', (req, res) => {
     let sql =
        `SELECT *  FROM MakeInfo A
         WHERE EXISTS ( SELECT * FROM CarInfo B WHERE A.makeID = B.makeID)
-        ORDER BY makerName`;
+        ORDER BY makeName`;
 
     db.pool.query(sql, (err, data) => {
         if (err) {
@@ -46,7 +46,7 @@ router.get('/', (req, res) => {
                 for (let i = 0; i < data.length; i++) {
                     let MakeInfo = {
                         makeID: data[i].makeID,
-                        makerName: data[i].makerName
+                        makeName: data[i].makeName
                     }
                     users.push(MakeInfo);
                 }
@@ -66,7 +66,7 @@ router.get('/', (req, res) => {
 });
 
 /**
- * Get the details of specific maker    .
+ * Get the details of specific make    .
  */
 router.get('/:id', (req, res) => {
     let id = req.params.id;
@@ -94,7 +94,7 @@ router.get('/:id', (req, res) => {
             if (data.length === 0) {
                 res.status(404).json({
                     result: "NotOK",
-                    message: "Maker not found."
+                    message: "Make not found."
                 });
                 return;
             }
@@ -102,7 +102,7 @@ router.get('/:id', (req, res) => {
             try {
                 let MakeInfo = {
                     makeID: data[0].makeID,
-                    makerName: data[0].makerName
+                    makeName: data[0].makeName
                 }
                 res.status(200).json(MakeInfo);
             }

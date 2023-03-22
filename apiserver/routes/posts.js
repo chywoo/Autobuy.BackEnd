@@ -156,7 +156,7 @@ router.get('/', (req, res) => {
                 A.price, A.title, A.description, 
                 B.FullName, B.Email, 
                 C.carID, C.makeID, C.carModel, C.imageURL,
-                D.makerName 
+                D.makeName 
         FROM Post A 
              JOIN UserInfo B ON A.userName = B.userName
              JOIN CarInfo C ON A.carID = C.carID
@@ -250,9 +250,9 @@ function makePostInfo(data) {
             makeID: data.makeID,
             carModel: data.carModel,
             imageURL: data.imageURL,
-            maker: {
+            make: {
                 makeID: data.makeID,
-                makerName: data.makerName
+                makeName: data.makeName
             }
         }
 
@@ -272,7 +272,7 @@ router.get('/:id', (req, res) => {
                 A.price, A.title, A.description, 
                 B.FullName, B.Email, 
                 C.carID, C.makeID, C.carModel, C.imageURL,
-                D.makerName 
+                D.makeName 
          FROM Post A 
               JOIN UserInfo B ON A.userName = B.userName
               JOIN CarInfo C ON A.carID = C.carID

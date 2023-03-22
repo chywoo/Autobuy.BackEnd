@@ -15,14 +15,14 @@ const resultOK = {
 router.get('/', (req, res) => {
     let makeID = req.query.makeID;
     let sql =
-        "SELECT A.carID, A.makeID, A.carModel, A.imageURL, B.makerName " +
+        "SELECT A.carID, A.makeID, A.carModel, A.imageURL, B.makeName " +
         "FROM CarInfo A JOIN MakeInfo B ON (A.makeID = B.makeID)";
 
     if (makeID != undefined && makeID != "") {
         sql = `${sql} WHERE A.makeID = ${makeID}`;
     }
 
-    sql = `${sql} ORDER BY makerName`;
+    sql = `${sql} ORDER BY makeName`;
 
     db.pool.query(sql, (err, data) => {
         if (err) {
@@ -55,9 +55,9 @@ router.get('/', (req, res) => {
                         carModel: data[i].carModel,
                         makeID: data[i].makeID,
                         imageURL: data[i].imageURL,
-                        maker: {
+                        make: {
                             makeID: data[i].makeID,
-                            makerName: data[i].makerName
+                            makeName: data[i].makeName
                         }
                     }
                     cars.push(carInfo);
@@ -84,8 +84,9 @@ router.get('/:id', (req, res) => {
     let id = req.params.id;
 
     let sql =
-        `SELECT A.carID, A.makeID, A.carModel, A.imageURL, B.makerName 
+        `SELECT A.carID, A.makeID, A.carModel, A.imageURL, B.makeName, C 
          FROM CarInfo A JOIN MakeInfo B ON (A.makeID = B.makeID) 
+              LEFT JOIN CarTrim C ON (A.carID = C.carID)
          WHERE carID = ${id}`;
 
     console.log(sql);
@@ -122,9 +123,9 @@ router.get('/:id', (req, res) => {
                     carModel: data[0].carModel,
                     makeID: data[0].makeID,
                     imageURL: data[0].imageURL,
-                    maker: {
+                    make: {
                         makeID: data[0].makeID,
-                        makerName: data[0].makerName
+                        makeName: data[0].makeName
                     }
                 }
                 res.status(200).json(carInfo);
