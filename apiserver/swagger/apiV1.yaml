@@ -103,6 +103,19 @@ components:
           type: "integer"
         role:
           $ref: "#/components/schemas/Role"
+    UserList:
+      type: "object"
+      properties:
+        total:
+          type: "integer"
+        pageSize:
+          type: "integer"
+        page:
+          type: "integer"
+        users:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/UserInfo"
 
 tags:
   - name: Auth
@@ -125,6 +138,19 @@ paths:
       summary: "Get all users"
       description: "Get all users"
       tags: [Users]
+      parameters:
+        - name: pageSize
+          in: query
+          description: "number of posts per page, Default is 10."
+          required: false
+          schema:
+            type: integer
+        - name: page
+          in: query
+          description: "page number, Default is 0."
+          required: false
+          schema:
+            type: integer
       responses:
         "200":
           description: "OK"

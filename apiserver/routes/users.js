@@ -89,11 +89,6 @@ router.post('/', (req, res) => {
  * Get the list of users
  */
 router.get('/', (req, res) => {
-    let sql =
-        `SELECT A.*, B.roleName 
-        FROM UserInfo A LEFT OUTER JOIN Roles B ON (A.roleID = B.roleID) 
-        ORDER BY userName`;
-
     // Check if the user is admin
     if (req.session.roleID != 3) {
         res.status(403).json({
@@ -102,6 +97,29 @@ router.get('/', (req, res) => {
         });
         return;
     }
+
+    let pageSize = req.query.pageSize;
+    let page = req.query.page;
+    if (pageSize === undefined) {
+        pageSize = 10;
+    }
+
+    if (page === undefined || page < 0 ) {
+        page = 0;
+    }
+
+    let dbOffset = page * pageSize;
+    let dbLimit = pageSize;
+
+    let sql =
+        `
+        SELECT COUNT(*)
+        FROM UserInfo A LEFT OUTER JOIN Roles B ON (A.roleID = B.roleID);
+        
+        SELECT A.*, B.roleName 
+        FROM UserInfo A LEFT OUTER JOIN Roles B ON (A.roleID = B.roleID) 
+        ORDER BY userName
+        LIMIT ${dbOffset }, ${dbLimit}`;
 
     db.pool.query(sql, (err, data) => {
         if (err) {
@@ -127,22 +145,32 @@ router.get('/', (req, res) => {
 
             try {
                 let users = [];
+                let total = data[0][0]["COUNT(*)"];
 
-                for (let i = 0; i < data.length; i++) {
+                let list = data[1];
+                for (let i = 0; i < list.length; i++) {
                     let user = {
-                        userName: data[i].userName,
+                        userName: list[i].userName,
                         password: "",
-                        fullName: data[i].fullName,
-                        email: data[i].email,
-                        roleID: data[i].roleID,
+                        fullName: list[i].fullName,
+                        email: list[i].email,
+                        roleID: list[i].roleID,
                         role: {
-                            roleID: data[i].roleID,
-                            roleName: data[i].roleName
+                            roleID: list[i].roleID,
+                            roleName: list[i].roleName
                         }
                     }
                     users.push(user);
                 }
-                res.status(200).json(users);
+
+                let postList = {
+                    total: total,
+                    pageSize: pageSize,
+                    page: page,
+                    users: users
+                }
+
+                res.status(200).json(postList);
             }
             catch (err) {
                 console.error(err.message)
