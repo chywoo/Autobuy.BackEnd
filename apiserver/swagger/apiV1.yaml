@@ -558,6 +558,8 @@ paths:
           description: "Created a new post"
         "400":
           description: "Post information is invalid"
+        "403":
+          description: "Forbidden"
         "500":
           description: "Internal server error"
       security:

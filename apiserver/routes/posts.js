@@ -28,7 +28,7 @@ router.post('/', (req, res) => {
         let userName = req.body.userName;
         let title = req.body.title;
         let description = req.body.description
-            .replaceAll("'", "\\'" )
+            .replaceAll("'", "\\'")
             .replaceAll("\"", "\\");
         let year = req.body.year;
         let mileage = req.body.mileage;
@@ -112,6 +112,14 @@ router.get('/', (req, res) => {
     let dbOffset = 0;
     let dbLimit = 10;
 
+    if (req.session.roleID != 2) {
+        res.status(403).json({
+            result: "Error",
+            message: "You are not authorized to access this page."
+        });
+        return;
+    }
+
     if (pageSize === undefined) {
         pageSize = 10;
     }
@@ -143,6 +151,8 @@ router.get('/', (req, res) => {
         filterQuery += ` AND A.year >= ${req.query.minYear}`;
     }
 
+    // Multiple queries. The first query is to get the total number of posts.
+    // The second query is to get the list of posts.
     let sql =
         `
         SELECT COUNT(*)
@@ -152,6 +162,7 @@ router.get('/', (req, res) => {
              JOIN MakeInfo D ON C.makeID = D.makeID
         WHERE 1 = 1 
              ${filterQuery};
+             
         SELECT A.postID, A.userName, A.carID, A.year, A.mileage, A.condition, 
                 A.price, A.title, A.description, 
                 B.FullName, B.Email, 

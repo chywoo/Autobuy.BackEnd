@@ -86,7 +86,10 @@ router.post('/login', (req, res) => {
             return
         }
 
-        let sql = `SELECT COUNT(*) AS Count FROM UserInfo WHERE UserName = '${userName}' AND Password = SHA2('${password}', 256)`;
+        let sql = `
+            SELECT userName, fullName, roleID 
+            FROM UserInfo 
+            WHERE userName = '${userName}' AND password = SHA2('${password}', 256)`;
 
         db.pool.query(sql, (err, data) => {
             let result = "OK";
@@ -104,11 +107,11 @@ router.post('/login', (req, res) => {
                         break;
                 }
             } else {
-                console.debug(data);
-
-                if (data[0].Count > 0) {
+                if (data.length > 0) {
                     result = "OK";
                     req.session.islogin = true;
+                    req.session.userName = data[0].userName;
+                    req.session.roleID = data[0].roleID;
                 } else {
                     console.error(sql);
                     result = "Error";
