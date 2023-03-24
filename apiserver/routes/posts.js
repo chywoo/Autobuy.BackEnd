@@ -13,9 +13,18 @@ const resultOK = {
 
 
 /**
- * Create post
+ * Create post. Only allowed to Sellers.
  */
 router.post('/', (req, res) => {
+
+    // Only allowed to Sellers.
+    if (req.session.roleID != 2) {
+        res.status(403).json({
+            result: "Error",
+            message: "You are not authorized to access this page."
+        });
+        return;
+    }
 
     // No parameters
     if (Object.keys(req.body).length === 0) {
@@ -111,14 +120,6 @@ router.get('/', (req, res) => {
     let filterQuery = "";
     let dbOffset = 0;
     let dbLimit = 10;
-
-    if (req.session.roleID != 2) {
-        res.status(403).json({
-            result: "Error",
-            message: "You are not authorized to access this page."
-        });
-        return;
-    }
 
     if (pageSize === undefined) {
         pageSize = 10;
