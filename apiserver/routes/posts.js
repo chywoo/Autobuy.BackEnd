@@ -142,6 +142,11 @@ router.get('/', (req, res) => {
         filterQuery += ` AND C.makeID = '${req.query.makeID}'`;
     }
 
+    // filter by carModel
+    if (req.query.carModel != undefined) {
+        filterQuery += ` AND C.carID = '${req.query.carModel}'`;
+    }
+
     // filter by maxPrice
     if (req.query.maxPrice != undefined) {
         filterQuery += ` AND A.price <= ${req.query.maxPrice}`;
