@@ -101,8 +101,23 @@ components:
           type: "string"
         roleID:
           type: "integer"
+
+    UserDetailInfo:
+      type: "object"
+      properties:
+        userName:
+          type: "string"
+        password:
+          type: "string"
+        fullName:
+          type: "string"
+        email:
+          type: "string"
+        roleID:
+          type: "integer"
         role:
           $ref: "#/components/schemas/Role"
+
     UserList:
       type: "object"
       properties:
@@ -115,7 +130,7 @@ components:
         users:
           type: "array"
           items:
-            $ref: "#/components/schemas/UserInfo"
+            $ref: "#/components/schemas/UserDetailInfo"
 
 tags:
   - name: Auth

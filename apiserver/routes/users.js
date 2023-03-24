@@ -30,23 +30,25 @@ router.post('/', (req, res) => {
         let password = req.body.password;
         let fullName = req.body.fullName;
         let email = req.body.email;
+        let roleID = req.body.roleID;
 
         // Invalid data
         if ( userName === undefined
             || password === undefined
             || fullName === undefined
-            || email === undefined ) {
+            || email === undefined
+            || roleID === undefined ) {
 
             res.status(400).json({
                 result: "Error",
-                message: "ID or password are invalid."
+                message: "User information is invalid."
             });
 
             return;
         }
 
-        let sql = `INSERT INTO UserInfo (userName, Password, fullName, email) 
-                VALUES ( '${userName}', '${password}', '${fullName}', '${email}' )`
+        let sql = `INSERT INTO UserInfo (userName, Password, fullName, email, roleID) 
+                VALUES ( '${userName}', '${password}', '${fullName}', '${email}', ${roleID} )`
 
 
         db.pool.query(sql, (err, data) => {
