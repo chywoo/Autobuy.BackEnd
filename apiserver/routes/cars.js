@@ -15,8 +15,11 @@ const resultOK = {
 router.get('/', (req, res) => {
     let makeID = req.query.makeID;
     let sql =
-        "SELECT A.carID, A.makeID, A.carModel, A.imageURL, B.makeName " +
-        "FROM CarInfo A JOIN MakeInfo B ON (A.makeID = B.makeID)";
+        `SELECT A.carID, A.makeID, A.carModel, A.imageURL, B.makeName,
+         C.displacement, C.wheelbase, C.length, C.width, C.height 
+         FROM CarInfo A 
+              JOIN MakeInfo B ON (A.makeID = B.makeID) 
+              LEFT JOIN CarTrim C ON (A.carID = C.carID)`;
 
     if (makeID != undefined && makeID != "") {
         sql = `${sql} WHERE A.makeID = ${makeID}`;
@@ -58,7 +61,12 @@ router.get('/', (req, res) => {
                         make: {
                             makeID: data[i].makeID,
                             makeName: data[i].makeName
-                        }
+                        },
+                        displacement: data[i].displacement,
+                        wheelbase: data[i].wheelbase,
+                        length: data[i].length,
+                        width: data[i].width,
+                        height: data[i].height
                     }
                     cars.push(carInfo);
                 }
@@ -84,10 +92,12 @@ router.get('/:id', (req, res) => {
     let id = req.params.id;
 
     let sql =
-        `SELECT A.carID, A.makeID, A.carModel, A.imageURL, B.makeName, C 
-         FROM CarInfo A JOIN MakeInfo B ON (A.makeID = B.makeID) 
+        `SELECT A.carID, A.makeID, A.carModel, A.imageURL, B.makeName,
+         C.displacement, C.wheelbase, C.length, C.width, C.height 
+         FROM CarInfo A 
+              JOIN MakeInfo B ON (A.makeID = B.makeID) 
               LEFT JOIN CarTrim C ON (A.carID = C.carID)
-         WHERE carID = ${id}`;
+         WHERE A.carID = ${id}`;
 
     console.log(sql);
 
@@ -126,7 +136,12 @@ router.get('/:id', (req, res) => {
                     make: {
                         makeID: data[0].makeID,
                         makeName: data[0].makeName
-                    }
+                    },
+                    displacement: data[0].displacement,
+                    wheelbase: data[0].wheelbase,
+                    length: data[0].length,
+                    width: data[0].width,
+                    height: data[0].height
                 }
                 res.status(200).json(carInfo);
             }

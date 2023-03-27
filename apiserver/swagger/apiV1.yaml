@@ -22,6 +22,16 @@ components:
           type: "string"
         make:
           $ref: "#/components/schemas/MakeInfo"
+        displacement:
+          type: "integer"
+        wheelbase:
+          type: "integer"
+        length:
+            type: "integer"
+        width:
+            type: "integer"
+        height:
+            type: "integer"
 
     MakeInfo:
       type: "object"

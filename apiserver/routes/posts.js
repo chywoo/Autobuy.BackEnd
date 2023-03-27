@@ -173,11 +173,13 @@ router.get('/', (req, res) => {
                 A.price, A.title, A.description, 
                 B.FullName, B.Email, 
                 C.carID, C.makeID, C.carModel, C.imageURL,
-                D.makeName 
+                D.makeName,
+                E.displacement, E.wheelbase, E.length, E.width, E.height
         FROM Post A 
              JOIN UserInfo B ON A.userName = B.userName
              JOIN CarInfo C ON A.carID = C.carID
              JOIN MakeInfo D ON C.makeID = D.makeID
+             LEFT JOIN CarTrim E ON A.carID = E.carID
         WHERE 1 = 1 
              ${filterQuery}
         ORDER BY A.postID DESC
@@ -270,9 +272,13 @@ function makePostInfo(data) {
             make: {
                 makeID: data.makeID,
                 makeName: data.makeName
-            }
+            },
+            displacement: data.displacement,
+            wheelbase: data.wheelbase,
+            length: data.length,
+            width: data.width,
+            height: data.height
         }
-
     }
 
     return postInfo;
