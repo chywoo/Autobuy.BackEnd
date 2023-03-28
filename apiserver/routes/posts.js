@@ -291,15 +291,17 @@ router.get('/:id', (req, res) => {
     let id = req.params.id;
 
     let sql =
-        `SELECT A.postID, A.userName, A.carID, A.year, A.mileage, A.condition,  
+        `SELECT A.postID, A.userName, A.carID, A.year, A.mileage, A.condition, 
                 A.price, A.title, A.description, 
                 B.FullName, B.Email, 
                 C.carID, C.makeID, C.carModel, C.imageURL,
-                D.makeName 
-         FROM Post A 
-              JOIN UserInfo B ON A.userName = B.userName
-              JOIN CarInfo C ON A.carID = C.carID
-              JOIN MakeInfo D ON C.makeID = D.makeID
+                D.makeName,
+                E.displacement, E.wheelbase, E.length, E.width, E.height
+        FROM Post A 
+             JOIN UserInfo B ON A.userName = B.userName
+             JOIN CarInfo C ON A.carID = C.carID
+             JOIN MakeInfo D ON C.makeID = D.makeID
+             LEFT JOIN CarTrim E ON A.carID = E.carID
          WHERE postID = ${id}
          ORDER BY A.postID DESC`;
 
