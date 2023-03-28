@@ -732,9 +732,9 @@ paths:
         - name: userName
           in: query
           description: "User name"
-          required: false
+          required: true
           schema:
-            type: integer
+            type: string
       responses:
         "200":
           description: "OK"
