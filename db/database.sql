@@ -111,6 +111,15 @@ VALUES
 (12, 1750, 398, 209, 118, 142),
 (13, 1750, 398, 209, 118, 142);
 
+DROP TABLE IF EXISTS AccessKeys;
+CREATE TABLE AccessKeys (
+  accessKey char(32) PRIMARY KEY,
+  userName  varchar(20) not null);
+
+INSERT INTO AccessKeys (accessKey, userName) VALUES
+('e9ffa2784d1a4e75985105b6267ca867', 'user'),
+('bb78504742904794af9a47556e0cc7e3', 'seller'),
+('51d5019456fc4d4198783ef7292d3fed', 'admin'),
 
 DROP TABLE IF EXISTS Post;
 CREATE TABLE Post (
