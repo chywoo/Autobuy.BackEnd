@@ -1,14 +1,21 @@
 openapi: 3.0.3
 info:
   title: API ME
-  description: API ME
+  description: API Server with express
   version: 1.0.0
 servers:
-  - url: 'http://localhost:3000/api/latest/'
+  - url: 'http://localhost:3000/api/v1/'
 
 # Define common JSON data format
 components:
   schemas:
+    AccessKey:
+      type: "object"
+      properties:
+        accessKey:
+          type: "string"
+        userName:
+          type: "string"
     CarInfo:
       type: "object"
       properties:
@@ -141,6 +148,13 @@ components:
           type: "array"
           items:
             $ref: "#/components/schemas/UserDetailInfo"
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []
 
 tags:
   - name: Auth
@@ -155,6 +169,8 @@ tags:
     description: Car Management
   - name: Posts
     description: Post Management
+  - name: Access Keys
+    description: Access-key Management
 
 paths:
 
@@ -319,8 +335,6 @@ paths:
                   $ref: "#/components/schemas/Role"
         "500":
           description: "Internal server error"
-      security:
-        - api_key: []
 
   /roles/{id}:
     get:
@@ -391,6 +405,7 @@ paths:
           description: "Internal server error"
 
   /auth:
+    description: "Authentication function"
     get:
       summary: "Check already login"
       description: ""
@@ -477,8 +492,6 @@ paths:
           description: "Make not found"
         "500":
           description: "Internal server error"
-      security:
-        - api_key: []
 
   /cars:
     get:
@@ -503,8 +516,6 @@ paths:
                   $ref: "#/components/schemas/CarInfo"
         "500":
           description: "Internal server error"
-      security:
-        - api_key: []
 
   /cars/{id}:
     get:
@@ -529,8 +540,6 @@ paths:
           description: "Car not found"
         "500":
           description: "Internal server error"
-      security:
-        - api_key: []
 
   /posts:
     get:
@@ -690,3 +699,71 @@ paths:
           description: "Post not found"
         "500":
           description: "Internal server error"
+  /keys:
+    post:
+      summary: "Create a access key."
+      description: "Create a new access key. You can login with this key."
+      tags: [Access Keys]
+      parameters:
+        - name: userName
+          in: query
+          description: "User name"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK. If the result is not OK, the message field will contain the error message."
+        "201":
+          description: "Created a new access key"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccessKey"
+        "400":
+          description: "Invalid user name supplied"
+        "500":
+          description: "Internal server error"
+    delete:
+      summary: "Delete access key by user name"
+      description: "Delete access key by user name"
+      tags: [Access Keys]
+      parameters:
+        - name: userName
+          in: query
+          description: "User name"
+          required: false
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "OK"
+        "404":
+          description: "User name not found"
+        "500":
+          description: "Internal server error"
+
+  /keys/{id}:
+    get:
+      summary: "Get user information by access key"
+      description: "Get user information by access key"
+      tags: [Access Keys]
+      parameters:
+        - name: id
+          in: path
+          description: "Access Key"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserInfo"
+        "404":
+          description: "Access key not found"
+        "500":
+          description: "Internal server error"
+
