@@ -74,7 +74,7 @@ INSERT INTO CarInfo (makeID, carModel, imageURL) VALUES
 (6, 'Civic', 'Honda_Civic.jpeg'),
 (7, 'Tucson', 'Hyundai_Tucson.jpeg'),
 (7, 'Casper', 'Hyundai_Casper.jpeg'),
-(8, 'Huracán', 'Lamborghini_Huracán.jpeg'),
+(8, 'Huracán', 'Lamborghini_Huracan.jpeg'),
 (9, 'Rx350', 'Lexus_Rx350.jpeg'),
 (10, 'AMG GT', 'MercedesAMG_GT.jpeg'),
 (11, 'Maxima', 'Nissan_Maxima.jpeg'),
