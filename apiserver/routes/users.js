@@ -48,7 +48,7 @@ router.post('/', (req, res) => {
         }
 
         let sql = `INSERT INTO UserInfo (userName, Password, fullName, email, roleID) 
-                VALUES ( '${userName}', '${password}', '${fullName}', '${email}', ${roleID} )`
+                VALUES ( '${userName}', SHA2('${password}', 256), '${fullName}', '${email}', ${roleID} )`
 
 
         db.pool.query(sql, (err, data) => {
