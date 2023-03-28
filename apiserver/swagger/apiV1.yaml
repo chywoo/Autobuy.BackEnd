@@ -421,7 +421,7 @@ paths:
   /auth/login:
     post:
       summary: "User Login"
-      description: ""
+      description: "User login. If the login is successful, the server will create session for the user. If the user is already logged in, the server will return 200 OK. There are sample users. You can use them to login. <ul><li>For normal user: user/user, access key is e9ffa2784d1a4e75985105b6267ca867</li><li>For seller: seller/seller, access key is bb78504742904794af9a47556e0cc7e3</li><li>For admin: admin/admin, access key is e9ffa2784d1a4e75985105b6267ca867</li><li>The password for the other usernames generated is 'Pass123*' and no access key is provided by default.</li></ul>"
       tags: [Auth]
       requestBody:
         content:
@@ -434,12 +434,16 @@ paths:
                 password:
                   type: "string"
       responses:
+        "200":
+          description: "Already logged in"
         "201":
-          description: "Created"
+          description: "Login successful"
         "400":
           description: "Invalid name or data"
         "500":
           description: "Internal server error"
+      security:
+        - bearerAuth: []
 
   /auth/logout:
     get:
@@ -600,8 +604,6 @@ paths:
                   $ref: "#/components/schemas/PostList"
         "500":
           description: "Internal server error"
-      security:
-        - api_key: []
 
     post:
       summary: "Create a new post"
@@ -622,8 +624,6 @@ paths:
           description: "Forbidden"
         "500":
           description: "Internal server error"
-      security:
-        - api_key: []
 
   /posts/{id}:
     get:
@@ -648,8 +648,6 @@ paths:
           description: "Post not found"
         "500":
           description: "Internal server error"
-      security:
-        - api_key: []
 
     put:
       summary: "Update post by id"
@@ -678,8 +676,6 @@ paths:
           description: "Post not found"
         "500":
           description: "Internal server error"
-      security:
-          - api_key: []
 
     delete:
       summary: "Delete post by id"

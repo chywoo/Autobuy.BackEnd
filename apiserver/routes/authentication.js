@@ -53,43 +53,59 @@ router.post('/login', (req, res) => {
         return;
     }
 
-    if (Object.keys(req.body).length < 2) {
+    // strip "Bearer " from the header
+    // Data: Bearer e9ffa2784d1a4e75985105b6267ca867
+    let accessKey = req.headers.authorization;
+    if (accessKey != undefined)
+        accessKey = accessKey.substring(7);
+
+    if (Object.keys(req.body).length < 2 && accessKey == undefined) {
         var result = "Error";
         var message = "Wrong parameters";
 
         console.debug(message);
 
-        res.status(204).json({
+        res.status(400).json({
             result: result,
             message: message
         });
 
         return;
     } else {
-        console.debug(req.body)
-        var userName, password
+        let sql = "";
 
+        if ( accessKey )
+        {
+            sql =
+                `SELECT B.*, C.roleName 
+                FROM AccessKeys A 
+                     JOIN UserInfo B ON A.userName = B.userName 
+                     JOIN Roles C ON B.roleID = C.roleID
+                WHERE A.accessKey = '${accessKey}'`;
+        } else {
+            var userName, password
 
-        // Check username and password parameters
-        try {
-            userName = req.body.userName;
-            password = req.body.password;
-        } catch (ex) {
-            console.error(ex.message);
-            result = "Error";
-            message = "Wrong parameters";
-            res.status(204).json({
-                result: result,
-                message: message
-            });
+            // Check username and password parameters
+            try {
+                userName = req.body.userName;
+                password = req.body.password;
+            } catch (ex) {
+                console.error(ex.message);
+                result = "Error";
+                message = "Wrong parameters";
+                res.status(204).json({
+                    result: result,
+                    message: message
+                });
 
-            return
-        }
+                return
+            }
 
-        let sql = `
+            sql = `
             SELECT userName, fullName, roleID 
             FROM UserInfo 
             WHERE userName = '${userName}' AND password = SHA2('${password}', 256)`;
+        }
 
         db.pool.query(sql, (err, data) => {
             let result = "OK";
