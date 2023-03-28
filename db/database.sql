@@ -119,7 +119,7 @@ CREATE TABLE AccessKeys (
 INSERT INTO AccessKeys (accessKey, userName) VALUES
 ('e9ffa2784d1a4e75985105b6267ca867', 'user'),
 ('bb78504742904794af9a47556e0cc7e3', 'seller'),
-('51d5019456fc4d4198783ef7292d3fed', 'admin'),
+('51d5019456fc4d4198783ef7292d3fed', 'admin');
 
 DROP TABLE IF EXISTS Post;
 CREATE TABLE Post (
