@@ -1,6 +1,6 @@
-
 CREATE DATABASE IF NOT EXISTS autobuy;
 
+DROP USER IF EXISTS 'capstone'@'%';
 CREATE USER IF NOT EXISTS 'capstone'@'%';
 
 ALTER USER 'capstone'@'%' IDENTIFIED WITH mysql_native_password BY 'capstone2023';
@@ -11,7 +11,7 @@ FLUSH PRIVILEGES;
 
 USE autobuy;
 
-DROP TABLE Roles;
+DROP TABLE IF EXISTS Roles;
 CREATE TABLE Roles (
   roleID   int(11)  PRIMARY KEY AUTO_INCREMENT, 
   roleName varchar(20) NOT NULL);
@@ -21,7 +21,7 @@ INSERT INTO Roles(roleID, roleName) VALUES
 ( 2, 'SELLER'),
 ( 3, 'ADMINISTRATOR');
 
-DROP TABLE UserInfo;
+DROP TABLE IF EXISTS UserInfo;
 
 CREATE TABLE UserInfo (
   userName varchar(20) NOT NULL PRIMARY KEY, 
@@ -36,7 +36,7 @@ INSERT INTO autobuy.UserInfo (userName, password, fullName, email, roleID) VALUE
 ('admin',  SHA2('admin',  256), 'Administrator', 'admin@autobuy.com', 3);
 
 
-DROP TABLE MakeInfo;
+DROP TABLE IF EXISTS MakeInfo;
 CREATE TABLE MakeInfo (
   makeID   int(11) AUTO_INCREMENT PRIMARY KEY, 
   makeName varchar(20));
@@ -57,7 +57,7 @@ INSERT INTO MakeInfo (makeName) VALUES ('Volkswagan');  -- 13
 INSERT INTO MakeInfo (makeName) VALUES ('Kia');         -- 14
 
 
-DROP TABLE CarInfo;
+DROP TABLE IF EXISTS CarInfo;
 CREATE TABLE CarInfo (
   carID    int(11) NOT NULL AUTO_INCREMENT, 
   makeID  int(11) NOT NULL, 
@@ -83,9 +83,8 @@ INSERT INTO CarInfo (makeID, carModel, imageURL) VALUES
 
 
 
-
-DROP TABLE CarTrim;
-CREATE TABLE CarTrim ( 
+DROP TABLE IF EXISTS CarTrim;
+CREATE TABLE  CarTrim ( 
   trimID       int(11) NOT NULL AUTO_INCREMENT, 
   carID        int(11), 
   displacement int(11), 
@@ -113,7 +112,7 @@ VALUES
 (13, 1750, 398, 209, 118, 142);
 
 
-DROP TABLE Post;
+DROP TABLE IF EXISTS Post;
 CREATE TABLE Post (
   postID      int(11) NOT NULL AUTO_INCREMENT,
   title       varchar(100) NOT NULL, 
@@ -131,8 +130,6 @@ INSERT INTO autobuy.Post (title, userName, carID, `year`, mileage, `condition`, 
 ('BMW 3 Sport Sedan. Silky 6 engine', 'user', 2, 2011, 140000, '', 80000000, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'),
 ('It\'s corvette.', 'seller', 3, 2011, 140000, '', 620000000, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'),
 ('Do you want a truck?', 'seller', 4, 2011, 140000, '', 620000000, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.');
-
-
 
 
 INSERT INTO UserInfo (userName,password,fullName,email,roleID)
