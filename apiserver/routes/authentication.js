@@ -3,7 +3,7 @@ const db = require("../services/database");
 var router = express.Router();
 
 /**
- * /auth
+ * Check if user is logged in
  */
 router.get('/', (req, res) => {
     if (req.session.islogin) {
@@ -20,7 +20,7 @@ router.get('/', (req, res) => {
 });
 
 /**
- * /auth/logout
+ * Log out
  */
 router.get('/logout', (req, res) => {
     req.session.destroy((err) => {
@@ -41,7 +41,7 @@ router.get('/logout', (req, res) => {
 
 
 /**
- * /auth/login
+ * Login with username and password, or with access key.
  */
 router.post('/login', (req, res) => {
     // session check
@@ -70,7 +70,7 @@ router.post('/login', (req, res) => {
         var userName, password
 
 
-        // Check user Id and password parameters
+        // Check username and password parameters
         try {
             userName = req.body.userName;
             password = req.body.password;
