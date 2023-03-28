@@ -18,7 +18,7 @@ function generateKey() {
 }
 
 /**
- * Create a role
+ * Create a access key for a user.
  */
 router.post('/', (req, res) => {
     // No parameters
@@ -105,7 +105,7 @@ router.post('/', (req, res) => {
 
 
 /**
- * Get the list of roles
+ * Delete access key by user name
  */
 router.delete('/', (req, res) => {
     // No parameters
@@ -152,12 +152,17 @@ router.delete('/', (req, res) => {
 });
 
 /**
- * Get the details of specific role.
+ * Get the user information by an access key.
  */
 router.get('/:id', (req, res) => {
     let id = req.params.id;
 
-    let sql = `SELECT * FROM Roles WHERE roleID = '${id}'`;
+    let sql =
+        `SELECT B.*, C.roleName 
+        FROM AccessKeys A 
+             JOIN UserInfo B ON A.userName = B.userName 
+             JOIN Roles C ON B.roleID = C.roleID
+        WHERE A.accessKey = '${id}'`;
 
     db.pool.query(sql, (err, data) => {
         let result = "OK";
@@ -180,17 +185,24 @@ router.get('/:id', (req, res) => {
             if (data.length === 0) {
                 res.status(404).json({
                     result: "NotOK",
-                    message: "Role not found."
+                    message: "Access key not found."
                 });
                 return;
             }
 
             try {
-                let roleInfo = {
+                let userInfo = {
+                    userName: data[0].userName,
+                    password: "",
+                    fullName: data[0].fullName,
+                    email: data[0].email,
                     roleID: data[0].roleID,
-                    roleName: data[0].roleName
+                    role: {
+                        roleID: data[0].roleID,
+                        roleName: data[0].roleName
+                    }
                 }
-                res.status(200).json(roleInfo);
+                res.status(200).json(userInfo);
             } catch (err) {
                 console.error(err.message)
                 result = "Error";
