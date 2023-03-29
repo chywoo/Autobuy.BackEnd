@@ -161,6 +161,8 @@ tags:
     description: Authentication
   - name: Users
     description: User Management
+    security:
+      - bearerAuth: []
   - name: Roles
     description: Role Management
   - name: Makes
@@ -176,8 +178,8 @@ paths:
 
   /users:
     get:
-      summary: "Get all users"
-      description: "Get all users"
+      summary: "Get all users."
+      description: "Get all users. This API is only for admin."
       tags: [Users]
       parameters:
         - name: pageSize
@@ -227,8 +229,8 @@ paths:
 
   /users/{userName}:
     get:
-      summary: "Get user by userName"
-      description: "Get user by userName"
+      summary: "Get user by userName."
+      description: "Get user by userName. This API is only for admin and logged in user."
       tags: [Users]
       parameters:
         - name: userName
@@ -253,7 +255,7 @@ paths:
 
     put:
       summary: "Update user by userName"
-      description: "Update user by userName"
+      description: "Update user by userName. This API is only for admin."
       tags: [Users]
       parameters:
         - name: userName
@@ -281,8 +283,8 @@ paths:
         "500":
           description: "Internal server error"
     delete:
-      summary: "Delete user by id"
-      description: "Delete user by id"
+      summary: "Delete user by userName."
+      description: "Delete user by userName. This API is only for admin."
       tags: [Users]
       parameters:
         - name: userName
@@ -302,7 +304,7 @@ paths:
   /roles:
     post:
       summary: "Create a new role."
-      description: "Create a new role."
+      description: "Create a new role. This API is only for admin."
       tags: [Roles]
       requestBody:
         description: "When creating a new role, you don't have to set the roleID field. It is ignored."
@@ -322,7 +324,7 @@ paths:
             description: "Internal server error"
     get:
       summary: "Get all roles"
-      description: "Get all roles"
+      description: "Get all roles. This API is only for admin."
       tags: [Roles]
       responses:
         "200":
@@ -339,7 +341,7 @@ paths:
   /roles/{id}:
     get:
       summary: "Get role by id"
-      description: "Get role by id"
+      description: "Get role by id. This API is only for admin."
       tags: [Roles]
       parameters:
         - name: id
@@ -380,8 +382,8 @@ paths:
 
   /roles/{id}/users:
     get:
-      summary: "Get all users of a role"
-      description: "Get all users of a role"
+      summary: "Get all users of a role."
+      description: "Get all users of a role. This API is only for admin."
       tags: [Roles]
       parameters:
         - name: id
@@ -421,7 +423,7 @@ paths:
   /auth/login:
     post:
       summary: "User Login"
-      description: "User login. If the login is successful, the server will create session for the user. If the user is already logged in, the server will return 200 OK. There are sample users. You can use them to login. <ul><li>For normal user: user/user, access key is e9ffa2784d1a4e75985105b6267ca867</li><li>For seller: seller/seller, access key is bb78504742904794af9a47556e0cc7e3</li><li>For admin: admin/admin, access key is e9ffa2784d1a4e75985105b6267ca867</li><li>The password for the other usernames generated is 'Pass123*' and no access key is provided by default.</li></ul>"
+      description: "User login. If the login is successful, the server will create session for the user. If the user is already logged in, the server will return 200 OK. There are sample users. You can use them to login. <ul><li>For normal user: user/user, access key is e9ffa2784d1a4e75985105b6267ca867</li><li>For seller: seller/seller, access key is bb78504742904794af9a47556e0cc7e3</li><li>For admin: admin/admin, access key is 51d5019456fc4d4198783ef7292d3fed</li><li>The password for the other usernames generated is 'Pass123*' and no access key is provided by default.</li></ul>"
       tags: [Auth]
       requestBody:
         content:

@@ -13,6 +13,14 @@ const resultOK = {
  * Create a role
  */
 router.post('/', (req, res) => {
+    // Check if the user is admin
+    if (req.session.roleID != 3) {
+        res.status(403).json({
+            result: "Error",
+            message: "You are not authorized."
+        });
+        return;
+    }
 
     // No parameters
     if (Object.keys(req.body).length === 0) {
@@ -79,6 +87,15 @@ router.post('/', (req, res) => {
  * Get the list of roles
  */
 router.get('/', (req, res) => {
+    // Check if the user is admin
+    if (req.session.roleID != 3) {
+        res.status(403).json({
+            result: "Error",
+            message: "You are not authorized."
+        });
+        return;
+    }
+
     let sql = `SELECT * FROM Roles ORDER BY roleName`;
 
     db.pool.query(sql, (err, data) => {
@@ -133,8 +150,16 @@ router.get('/', (req, res) => {
  * Get the details of specific role.
  */
 router.get('/:id', (req, res) => {
-    let id = req.params.id;
+    // Check if the user is admin
+    if (req.session.roleID != 3) {
+        res.status(403).json({
+            result: "Error",
+            message: "You are not authorized."
+        });
+        return;
+    }
 
+    let id = req.params.id;
     let sql = `SELECT * FROM Roles WHERE roleID = '${id}'`;
 
     db.pool.query(sql, (err, data) => {
@@ -188,6 +213,15 @@ router.get('/:id', (req, res) => {
  * Delete a role.
  */
 router.delete('/:id', (req, res) => {
+    // Check if the user is admin
+    if (req.session.roleID != 3) {
+        res.status(403).json({
+            result: "Error",
+            message: "You are not authorized."
+        });
+        return;
+    }
+
     let id = req.params.id;
     let sql = "";
 
@@ -238,6 +272,15 @@ router.delete('/:id', (req, res) => {
  * Get the list of users of a specific role.
  */
 router.get('/:id/users', (req, res) => {
+    // Check if the user is admin
+    if (req.session.roleID != 3) {
+        res.status(403).json({
+            result: "Error",
+            message: "You are not authorized."
+        });
+        return;
+    }
+
     let id = req.params.id;
 
     if (id === undefined || id === "" || !Number.isInteger(+id)) {

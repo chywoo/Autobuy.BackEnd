@@ -16,7 +16,6 @@ const resultOK = {
  * Create user
  */
 router.post('/', (req, res) => {
-
     // No parameters
     if (Object.keys(req.body).length === 0) {
         result.result = "NotOK";
@@ -95,7 +94,7 @@ router.get('/', (req, res) => {
     if (req.session.roleID != 3) {
         res.status(403).json({
             result: "Error",
-            message: "You are not authorized to access this page."
+            message: "You are not authorized."
         });
         return;
     }
@@ -191,6 +190,16 @@ router.get('/', (req, res) => {
  * Get the details of specific user.
  */
 router.get('/:userName', (req, res) => {
+
+    // Check if the user is admin
+    if (req.session.roleID != 3 && req.session.userName != req.params.userName) {
+        res.status(403).json({
+            result: "Error",
+            message: "You are not authorized."
+        });
+        return;
+    }
+
     let userName = req.params.userName;
 
     let sql =
@@ -256,6 +265,15 @@ router.get('/:userName', (req, res) => {
  * Update the specific user.
  */
 router.put('/:userName', (req, res) => {
+    // Check if the user is admin
+    if (req.session.roleID != 3) {
+        res.status(403).json({
+            result: "Error",
+            message: "You are not authorized."
+        });
+        return;
+    }
+
     let userName = req.params.userName;
     let userInfo = req.body;
     let sql = "";
@@ -317,6 +335,15 @@ router.put('/:userName', (req, res) => {
  * Delete the specific user.
  */
 router.delete('/:userName', (req, res) => {
+    // Check if the user is admin
+    if (req.session.roleID != 3) {
+        res.status(403).json({
+            result: "Error",
+            message: "You are not authorized."
+        });
+        return;
+    }
+
     let userName = req.params.userName;
     let sql = "";
 
