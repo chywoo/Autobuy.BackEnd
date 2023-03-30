@@ -4,7 +4,7 @@ info:
   description: API Server with express
   version: 1.0.0
 servers:
-  - url: 'http://localhost:3000/api/v1/'
+  - url: 'http://localhost:3000/api/v1'
 
 # Define common JSON data format
 components:
