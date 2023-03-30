@@ -1,8 +1,44 @@
 openapi: 3.0.3
 info:
   title: API ME
-  description: API Server with express
   version: 1.0.0
+  description: This document describes the API for the API ME project. 
+    <h3>Sample data information</h3>
+    There are sample users. You can use them to login. The access key is provided for each user. You can use it to access the APIs.
+    
+    <table width="50%">
+    <thead>
+    <tr>
+    <th>Role</th>
+    <th>Username</th>
+    <th>Password</th>
+    <th>Access key</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td>User</td>
+    <td>user</td>
+    <td>user</td>
+    <td>e9ffa2784d1a4e75985105b6267ca867</td>
+    </tr>
+    <tr>
+    <td>Seller</td>
+    <td>seller</td>
+    <td>seller</td>
+    <td>bb78504742904794af9a47556e0cc7e3</td>
+    </tr>
+    <tr>
+    <td>Admin</td>
+    <td>admin</td>
+    <td>admin</td>
+    <td>51d5019456fc4d4198783ef7292d3fed</td>
+    </tr>
+    </tbody>
+    </table>
+    <br>
+    The password for the other usernames generated is 'Pass123*' and no access key is provided by default.
+
 servers:
   - url: 'http://localhost:3000/api/v1'
 
@@ -153,8 +189,8 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
-security:
-  - bearerAuth: []
+#security:
+#  - bearerAuth: []
 
 tags:
   - name: Auth
@@ -423,7 +459,7 @@ paths:
   /auth/login:
     post:
       summary: "User Login"
-      description: "User login. If the login is successful, the server will create session for the user. If the user is already logged in, the server will return 200 OK. There are sample users. You can use them to login. <ul><li>For normal user: user/user, access key is e9ffa2784d1a4e75985105b6267ca867</li><li>For seller: seller/seller, access key is bb78504742904794af9a47556e0cc7e3</li><li>For admin: admin/admin, access key is 51d5019456fc4d4198783ef7292d3fed</li><li>The password for the other usernames generated is 'Pass123*' and no access key is provided by default.</li></ul>"
+      description: "User login. If the login is successful, the server will create session for the user. If the user is already logged in, the server will return 200 OK."
       tags: [Auth]
       requestBody:
         content:
