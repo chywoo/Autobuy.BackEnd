@@ -18,10 +18,10 @@ const resultOK = {
 router.post('/', (req, res) => {
     // No parameters
     if (Object.keys(req.body).length === 0) {
-        result.result = "NotOK";
-        result.message = "No parameters";
-
-        res.status(204).json(res);
+        res.status(400).json({
+            result: "NotOK",
+            message: "No parameters"
+        });
     } else {
         console.info(req.body)
 
