@@ -291,7 +291,7 @@ router.get('/:id', (req, res) => {
     let id = parseInt(req.params.id);
 
     // Check if ID is a number.
-    if ( typeof id != 'number' ) {
+    if ( isNaN(id) || typeof id != 'number' ) {
         res.status(400).json({
             result: "Error",
             message: "postID must be a number."
@@ -364,7 +364,7 @@ router.put('/:id', (req, res) => {
     let id = parseInt(req.params.id);
 
     // Check if ID is a number.
-    if ( typeof id != 'number' ) {
+    if ( isNaN(id) || typeof id != 'number' ) {
         res.status(400).json({
             result: "Error",
             message: "postID must be a number."
