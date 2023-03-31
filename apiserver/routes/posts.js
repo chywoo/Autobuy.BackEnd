@@ -290,6 +290,15 @@ function makePostInfo(data) {
 router.get('/:id', (req, res) => {
     let id = req.params.id;
 
+    // Check if ID is a number.
+    if ( typeof id != 'number' ) {
+        res.status(400).json({
+            result: "Error",
+            message: "postID must be a number."
+        });
+        return;
+    }
+
     let sql =
         `SELECT A.postID, A.userName, A.carID, A.year, A.mileage, A.condition, 
                 A.price, A.title, A.description, 
@@ -353,6 +362,16 @@ router.get('/:id', (req, res) => {
  */
 router.put('/:id', (req, res) => {
     let id = req.params.id;
+
+    // Check if ID is a number.
+    if ( typeof id != 'number' ) {
+        res.status(400).json({
+            result: "Error",
+            message: "postID must be a number."
+        });
+        return;
+    }
+
     let post = req.body;
     let sql = "";
 
@@ -475,6 +494,15 @@ router.put('/:id', (req, res) => {
 router.delete('/:id', (req, res) => {
     let id = req.params.id;
     let sql = "";
+
+    // Check if ID is a number.
+    if ( typeof id != 'number' ) {
+        res.status(400).json({
+            result: "Error",
+            message: "postID must be a number."
+        });
+        return;
+    }
 
     try {
         sql = `DELETE FROM Post WHERE postID = '${id}'`;

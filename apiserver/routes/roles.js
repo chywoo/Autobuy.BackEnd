@@ -160,6 +160,16 @@ router.get('/:id', (req, res) => {
     }
 
     let id = req.params.id;
+
+    // Check if ID is a number.
+    if ( typeof id != 'number' ) {
+        res.status(400).json({
+            result: "Error",
+            message: "ID must be a number."
+        });
+        return;
+    }
+
     let sql = `SELECT * FROM Roles WHERE roleID = '${id}'`;
 
     db.pool.query(sql, (err, data) => {
@@ -223,6 +233,16 @@ router.delete('/:id', (req, res) => {
     }
 
     let id = req.params.id;
+
+    // Check if ID is a number.
+    if ( typeof id != 'number' ) {
+        res.status(400).json({
+            result: "Error",
+            message: "ID must be a number."
+        });
+        return;
+    }
+
     let sql = "";
 
     try {
@@ -282,6 +302,15 @@ router.get('/:id/users', (req, res) => {
     }
 
     let id = req.params.id;
+
+    // Check if ID is a number.
+    if ( typeof id != 'number' ) {
+        res.status(400).json({
+            result: "Error",
+            message: "ID must be a number."
+        });
+        return;
+    }
 
     if (id === undefined || id === "" || !Number.isInteger(+id)) {
         res.status(400).json({

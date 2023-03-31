@@ -71,6 +71,15 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) => {
     let id = req.params.id;
 
+    // Check if ID is a number.
+    if ( typeof id != 'number' ) {
+        res.status(400).json({
+            result: "Error",
+            message: "ID must be a number."
+        });
+        return;
+    }
+
     let sql = `SELECT * FROM MakeInfo WHERE makeID = '${id}'`;
 
     db.pool.query(sql, (err, data) => {
