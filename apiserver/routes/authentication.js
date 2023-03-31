@@ -6,6 +6,15 @@ var router = express.Router();
  * Check if user is logged in
  */
 router.get('/', (req, res) => {
+    // check system status
+    if (req.app.locals.suspendSystem) {
+        res.status(503).json({
+            result: "Error",
+            message: "Service suspended"
+        });
+        return;
+    }
+
     if (req.session.islogin) {
         res.json({
             result: "OK",
@@ -44,6 +53,15 @@ router.get('/logout', (req, res) => {
  * Login with username and password, or with access key.
  */
 router.post('/login', (req, res) => {
+    // check system status
+    if (req.app.locals.suspendSystem) {
+        res.status(503).json({
+            result: "Error",
+            message: "Service suspended"
+        });
+        return;
+    }
+
     // session check
     if (req.session.islogin) {
         res.json({
@@ -76,6 +94,15 @@ router.post('/login', (req, res) => {
 
         if ( accessKey )
         {
+            // check system status
+            if (req.app.locals.suspendAccessToken) {
+                res.status(503).json({
+                    result: "Error",
+                    message: "Service suspended"
+                });
+                return;
+            }
+
             sql =
                 `SELECT B.*, C.roleName 
                 FROM AccessKeys A 

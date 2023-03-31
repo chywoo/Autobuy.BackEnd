@@ -16,6 +16,7 @@ const makesRouter = require('./routes/makes');
 const postRouter = require('./routes/posts');
 const corRouter = require('./routes/cars');
 const keyRouter = require('./routes/keys');
+const systemRouter = require('./routes/system');
 
 var app = express();
 
@@ -38,8 +39,13 @@ app.use('/api/v1/makes', makesRouter);
 app.use('/api/v1/posts', postRouter);
 app.use('/api/v1/cars', corRouter);
 app.use('/api/v1/keys', keyRouter);
+app.use('/api/v1/system', systemRouter);
 
 // Swagger Document
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, { explorer: true }));
+
+// System handler
+app.locals.suspendSystem = false;
+app.locals.suspendAccessToken = false;
 
 module.exports = app;
