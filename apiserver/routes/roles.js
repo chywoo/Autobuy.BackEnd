@@ -159,7 +159,7 @@ router.get('/:id', (req, res) => {
         return;
     }
 
-    let id = req.params.id;
+    let id = parseInt(req.params.id);
 
     // Check if ID is a number.
     if ( typeof id != 'number' ) {
@@ -232,7 +232,7 @@ router.delete('/:id', (req, res) => {
         return;
     }
 
-    let id = req.params.id;
+    let id = parseInt(req.params.id);
 
     // Check if ID is a number.
     if ( typeof id != 'number' ) {
@@ -301,7 +301,7 @@ router.get('/:id/users', (req, res) => {
         return;
     }
 
-    let id = req.params.id;
+    let id = parseInt(req.params.id);
 
     // Check if ID is a number.
     if ( typeof id != 'number' ) {

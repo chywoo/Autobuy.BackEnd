@@ -69,7 +69,7 @@ router.get('/', (req, res) => {
  * Get the details of specific make    .
  */
 router.get('/:id', (req, res) => {
-    let id = req.params.id;
+    let id = parseInt(req.params.id);
 
     // Check if ID is a number.
     if ( typeof id != 'number' ) {

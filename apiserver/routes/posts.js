@@ -288,7 +288,7 @@ function makePostInfo(data) {
  * Get the details of specific post.
  */
 router.get('/:id', (req, res) => {
-    let id = req.params.id;
+    let id = parseInt(req.params.id);
 
     // Check if ID is a number.
     if ( typeof id != 'number' ) {
@@ -361,7 +361,7 @@ router.get('/:id', (req, res) => {
  * Update the specific post.
  */
 router.put('/:id', (req, res) => {
-    let id = req.params.id;
+    let id = parseInt(req.params.id);
 
     // Check if ID is a number.
     if ( typeof id != 'number' ) {
@@ -492,7 +492,7 @@ router.put('/:id', (req, res) => {
  * Delete the specific post.
  */
 router.delete('/:id', (req, res) => {
-    let id = req.params.id;
+    let id = parseInt(req.params.id);
     let sql = "";
 
     // Check if ID is a number.
