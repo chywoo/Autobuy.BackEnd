@@ -689,7 +689,7 @@ paths:
 
     put:
       summary: "Update post by id"
-      description: "Update post by id"
+      description: "Update post by id."
       tags: [Posts]
       parameters:
         - name: id
@@ -699,6 +699,7 @@ paths:
           schema:
               type: integer
       requestBody:
+        description: "When updating a post, you don't have to set the postID, author and car fields. They are ignored."
         content:
           application/json:
             schema:
