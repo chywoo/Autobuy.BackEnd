@@ -473,11 +473,9 @@ paths:
                   type: "string"
       responses:
         "200":
-          description: "Already logged in"
-        "201":
-          description: "Login successful"
-        "400":
-          description: "Invalid name or data"
+          description: "Login successful or Already logged in"
+        "401":
+          description: "Invalid username or information"
         "500":
           description: "Internal server error"
       security:

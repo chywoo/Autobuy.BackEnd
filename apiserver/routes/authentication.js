@@ -83,7 +83,7 @@ router.post('/login', (req, res) => {
 
         console.debug(message);
 
-        res.status(400).json({
+        res.status(401).json({
             result: result,
             message: message
         });
@@ -120,7 +120,7 @@ router.post('/login', (req, res) => {
                 console.error(ex.message);
                 result = "Error";
                 message = "Wrong parameters";
-                res.status(204).json({
+                res.status(401).json({
                     result: result,
                     message: message
                 });
@@ -139,7 +139,6 @@ router.post('/login', (req, res) => {
             let message = "";
 
             if (err) {
-                console.error(sql);
                 console.error(err.message);
 
                 switch (err.code) {
@@ -157,8 +156,9 @@ router.post('/login', (req, res) => {
                     req.session.roleID = data[0].roleID;
                 } else {
                     console.error(sql);
+                    res.status(401);
                     result = "Error";
-                    message = "Wrong user name or password";
+                    message = "Wrong information";
                 }
             }
             res.json({
