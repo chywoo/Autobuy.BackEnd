@@ -22,15 +22,14 @@ function generateKey() {
  */
 router.post('/', (req, res) => {
     // No parameters
-    let userName = req.query.userName;
+    let userName = req.session.userName;
 
     // Invalid data
     if (userName === undefined || userName === "") {
-        res.status(400).json({
+        res.status(401).json({
             result: "Error",
-            message: "User name is invalid."
+            message: "You are not authorized."
         });
-
         return;
     } else {
         let checkSql =
