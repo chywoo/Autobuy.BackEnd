@@ -1,145 +1,115 @@
-var express = require('express');
-const db = require("../services/database");
-var router = express.Router();
+"use strict";
 
-/**
- * Check if user is logged in
- */
+const express = require('express');
+const router = express.Router();
+const db = require('../services/database');
+const {
+    sendBadRequest,
+    sendNotFound,
+    sendServerError,
+    handleDbError,
+} = require('../utils/http');
+
+function getAccessKey(req) {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader) {
+        return null;
+    }
+
+    if (!authHeader.startsWith('Bearer ')) {
+        return null;
+    }
+
+    return authHeader.slice(7).trim();
+}
+
 router.get('/', (req, res) => {
     if (req.session.islogin) {
-        res.json({
-            result: "OK",
-            message: "Already logged in"
-        });
-    } else {
-        res.status(401).json({
-            result: "Error",
-            message: "Not logged in"
+        return res.json({
+            result: 'OK',
+            message: 'Already logged in',
         });
     }
+
+    return sendError(res, 401, 'Not logged in');
 });
 
-/**
- * Log out
- */
 router.get('/logout', (req, res) => {
     req.session.destroy((err) => {
         if (err) {
             console.error(err);
-            res.status(500).json({
-                result: "Error",
-                message: "Internal server error"
-            });
-        } else {
-            res.json({
-                result: "OK",
-                message: "Logout success"
-            });
+            return sendServerError(res);
         }
+
+        return res.json({
+            result: 'OK',
+            message: 'Logout success',
+        });
     });
 });
 
-
-/**
- * Login with username and password, or with access key.
- */
-router.post('/login', (req, res) => {
-    // session check
+router.post('/login', async (req, res) => {
     if (req.session.islogin) {
-        res.json({
-            result: "OK",
-            message: "Already logged in"
+        return res.json({
+            result: 'OK',
+            message: 'Already logged in',
         });
-        return;
     }
 
-    // strip "Bearer " from the header
-    // Data: Bearer e9ffa2784d1a4e75985105b6267ca867
-    let accessKey = req.headers.authorization;
-    if (accessKey != undefined)
-        accessKey = accessKey.substring(7);
+    const accessKey = getAccessKey(req);
 
-    if (Object.keys(req.body).length < 2 && accessKey == undefined) {
-        var result = "Error";
-        var message = "Wrong parameters";
+    let sql = '';
+    let params = [];
 
-        console.debug(message);
-
-        res.status(400).json({
-            result: result,
-            message: message
-        });
-
-        return;
+    if (accessKey) {
+        sql = `
+            SELECT B.userName, B.roleID
+            FROM AccessKeys A
+                JOIN UserInfo B ON A.userName = B.userName
+            WHERE A.accessKey = ?
+            LIMIT 1`;
+        params = [accessKey];
     } else {
-        let sql = "";
+        const { userName, password } = req.body;
 
-        if ( accessKey )
-        {
-            sql =
-                `SELECT B.*, C.roleName 
-                FROM AccessKeys A 
-                     JOIN UserInfo B ON A.userName = B.userName 
-                     JOIN Roles C ON B.roleID = C.roleID
-                WHERE A.accessKey = '${accessKey}'`;
-        } else {
-            var userName, password
-
-            // Check username and password parameters
-            try {
-                userName = req.body.userName;
-                password = req.body.password;
-            } catch (ex) {
-                console.error(ex.message);
-                result = "Error";
-                message = "Wrong parameters";
-                res.status(204).json({
-                    result: result,
-                    message: message
-                });
-
-                return
-            }
-
-            sql = `
-            SELECT userName, fullName, roleID 
-            FROM UserInfo 
-            WHERE userName = '${userName}' AND password = SHA2('${password}', 256)`;
+        if (!userName || !password) {
+            return sendBadRequest(res, 'Wrong parameters');
         }
 
-        db.pool.query(sql, (err, data) => {
-            let result = "OK";
-            let message = "";
+        sql = `
+            SELECT userName, roleID
+            FROM UserInfo
+            WHERE userName = ? AND password = SHA2(?, 256)
+            LIMIT 1`;
+        params = [userName, password];
+    }
 
-            if (err) {
-                console.error(sql);
-                console.error(err.message);
+    try {
+        const rows = await db.query(sql, params);
 
-                switch (err.code) {
-                    default:
-                        result = "Error";
-                        message = err.sqlMessage
-                        res.status(500);
-                        break;
-                }
-            } else {
-                if (data.length > 0) {
-                    result = "OK";
-                    req.session.islogin = true;
-                    req.session.userName = data[0].userName;
-                    req.session.roleID = data[0].roleID;
-                } else {
-                    console.error(sql);
-                    result = "Error";
-                    message = "Wrong user name or password";
-                }
-            }
-            res.json({
-                result: result,
-                message: message
-            });
+        if (!rows || rows.length === 0) {
+            return sendNotFound(res, 'Wrong user name or password');
+        }
+
+        req.session.islogin = true;
+        req.session.userName = rows[0].userName;
+        req.session.roleID = rows[0].roleID;
+
+        return res.json({
+            result: 'OK',
+            message: '',
         });
+    } catch (err) {
+        return handleDbError(res, err);
     }
 });
+
+function sendError(res, status, message) {
+    return res.status(status).json({
+        result: 'Error',
+        message,
+    });
+}
 
 module.exports = router;

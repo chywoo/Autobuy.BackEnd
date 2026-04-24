@@ -1,395 +1,181 @@
-"use strict"
+"use strict";
 
 const express = require('express');
 const router = express.Router();
 const db = require('../services/database');
+const {
+    sendForbidden,
+    sendBadRequest,
+    sendNotFound,
+    handleDbError,
+    parsePagination,
+} = require('../utils/http');
 
-
-const resultOK = {
-  result: "OK",
-  message: ""
+function isAdmin(req) {
+    return Number(req.session.roleID) === 3;
 }
 
+function mapUser(row) {
+    return {
+        userName: row.userName,
+        password: '',
+        fullName: row.fullName,
+        email: row.email,
+        roleID: row.roleID,
+        role: {
+            roleID: row.roleID,
+            roleName: row.roleName,
+        },
+    };
+}
 
+router.post('/', async (req, res) => {
+    const { userName, password, fullName, email, roleID } = req.body;
 
-/**
- * Create user
- */
-router.post('/', (req, res) => {
-    // No parameters
-    if (Object.keys(req.body).length === 0) {
-        result.result = "NotOK";
-        result.message = "No parameters";
+    if (!userName || !password || !fullName || !email || roleID === undefined) {
+        return sendBadRequest(res, 'User information is invalid.');
+    }
 
-        res.status(204).json(res);
-    } else {
-        console.info(req.body)
+    const sql = `
+        INSERT INTO UserInfo (userName, Password, fullName, email, roleID)
+        VALUES (?, SHA2(?, 256), ?, ?, ?)`;
 
-        let userName = req.body.userName;
-        let password = req.body.password;
-        let fullName = req.body.fullName;
-        let email = req.body.email;
-        let roleID = req.body.roleID;
+    try {
+        await db.query(sql, [userName, password, fullName, email, roleID]);
 
-        // Invalid data
-        if ( userName === undefined
-            || password === undefined
-            || fullName === undefined
-            || email === undefined
-            || roleID === undefined ) {
-
-            res.status(400).json({
-                result: "Error",
-                message: "User information is invalid."
+        return res.status(201).json({
+            result: 'OK',
+            message: '',
+        });
+    } catch (err) {
+        if (err.code === 'ER_DUP_ENTRY') {
+            return res.status(200).json({
+                result: 'DUPLICATED',
+                message: 'The user already exists.',
             });
-
-            return;
         }
 
-        let sql = `INSERT INTO UserInfo (userName, Password, fullName, email, roleID) 
-                VALUES ( '${userName}', SHA2('${password}', 256), '${fullName}', '${email}', ${roleID} )`
-
-
-        db.pool.query(sql, (err, data) => {
-            let result = "OK";
-            let message = "";
-
-            if (err) {
-                console.error(err.message);
-
-                switch (err.code) {
-                    case "ER_DUP_ENTRY":
-                        result = "DUPLICATED";
-                        message = "The user already exists.";
-                        res.status(200).json({
-                            result: result,
-                            message: message
-                        });
-                        break;
-
-                    default:
-                        result = "Error";
-                        message = err.sqlMessage
-                        res.status(500).json({
-                            result: result,
-                            message: message
-                        });
-                        break;
-                }
-            } else {
-                res.status(201).json({
-                    result: result,
-                    message: message
-                });
-            }
-        });
+        return handleDbError(res, err);
     }
 });
 
-/**
- * Get the list of users
- */
-router.get('/', (req, res) => {
-    // Check if the user is admin
-    if (req.session.roleID != 3) {
-        res.status(403).json({
-            result: "Error",
-            message: "You are not authorized."
-        });
-        return;
+router.get('/', async (req, res) => {
+    if (!isAdmin(req)) {
+        return sendForbidden(res);
     }
 
-    let pageSize = req.query.pageSize;
-    let page = req.query.page;
-    if (pageSize === undefined) {
-        pageSize = 10;
-    }
+    const { page, pageSize, offset } = parsePagination(req.query);
 
-    if (page === undefined || page < 0 ) {
-        page = 0;
-    }
-
-    let dbOffset = page * pageSize;
-    let dbLimit = pageSize;
-
-    let sql =
-        `
-        SELECT COUNT(*)
-        FROM UserInfo A LEFT OUTER JOIN Roles B ON (A.roleID = B.roleID);
-        
-        SELECT A.*, B.roleName 
-        FROM UserInfo A LEFT OUTER JOIN Roles B ON (A.roleID = B.roleID) 
-        ORDER BY userName
-        LIMIT ${dbOffset }, ${dbLimit}`;
-
-    db.pool.query(sql, (err, data) => {
-        if (err) {
-            console.error(err.message);
-            switch (err.code) {
-                default:
-                    let result = "Error";
-                    let message = err.sqlMessage
-                    res.status(500).json({
-                        result: result,
-                        message: message
-                    });
-                    break;
-            }
-        } else {
-            if (data.length === 0) {
-                res.status(404).json({
-                    result: "NotOK",
-                    message: "User not found."
-                });
-                return;
-            }
-
-            try {
-                let users = [];
-                let total = data[0][0]["COUNT(*)"];
-
-                let list = data[1];
-                for (let i = 0; i < list.length; i++) {
-                    let user = {
-                        userName: list[i].userName,
-                        password: "",
-                        fullName: list[i].fullName,
-                        email: list[i].email,
-                        roleID: list[i].roleID,
-                        role: {
-                            roleID: list[i].roleID,
-                            roleName: list[i].roleName
-                        }
-                    }
-                    users.push(user);
-                }
-
-                let postList = {
-                    total: total,
-                    pageSize: pageSize,
-                    page: page,
-                    users: users
-                }
-
-                res.status(200).json(postList);
-            }
-            catch (err) {
-                console.error(err.message)
-                let result = "Error";
-                let message = err.sqlMessage
-                res.status(500).json({
-                    result: result,
-                    message: message
-                });
-            }
-        }
-    });
-});
-
-/**
- * Get the details of specific user.
- */
-router.get('/:userName', (req, res) => {
-
-    // Check if the user is admin
-    if (req.session.roleID != 3 && req.session.userName != req.params.userName) {
-        res.status(403).json({
-            result: "Error",
-            message: "You are not authorized."
-        });
-        return;
-    }
-
-    let userName = req.params.userName;
-
-    let sql =
-        `SELECT A.*, B.roleName 
-        FROM UserInfo A LEFT OUTER JOIN Roles B ON (A.roleID = B.roleID) 
-        WHERE userName = '${userName}'
-        ORDER BY userName`;
-
-    db.pool.query(sql, (err, data) => {
-        let result = "OK";
-        let message = "";
-
-        if (err) {
-            console.error(err.message);
-
-            switch (err.code) {
-                default:
-                    result = "Error";
-                    message = err.sqlMessage
-                    res.status(500).json({
-                        result: result,
-                        message: message
-                    });
-                    break;
-            }
-        } else {
-            if (data.length === 0) {
-                res.status(404).json({
-                    result: "NotOK",
-                    message: "User not found."
-                });
-                return;
-            }
-
-            try {
-                let userInfo = {
-                    userName: data[0].userName,
-                    password: "",
-                    fullName: data[0].fullName,
-                    email: data[0].email,
-                    roleID: data[0].roleID,
-                    role: {
-                        roleID: data[0].roleID,
-                        roleName: data[0].roleName
-                    }
-                }
-                res.status(200).json(userInfo);
-            }
-            catch (err) {
-                console.error(err.message)
-                result = "Error";
-                message = err.sqlMessage
-                res.status(500).json({
-                    result: result,
-                    message: message
-                });
-            }
-        }
-    });
-});
-
-/**
- * Update the specific user.
- */
-router.put('/:userName', (req, res) => {
-    // Check if the user is admin
-    if (req.session.roleID != 3) {
-        res.status(403).json({
-            result: "Error",
-            message: "You are not authorized."
-        });
-        return;
-    }
-
-    let userName = req.params.userName;
-    let userInfo = req.body;
-    let sql = "";
+    const countSql = 'SELECT COUNT(*) AS total FROM UserInfo';
+    const listSql = `
+        SELECT A.userName, A.fullName, A.email, A.roleID, B.roleName
+        FROM UserInfo A
+            LEFT JOIN Roles B ON A.roleID = B.roleID
+        ORDER BY A.userName
+        LIMIT ?, ?`;
 
     try {
-        sql =
-        `UPDATE UserInfo
-        SET 
-            fullName = '${userInfo.fullName}',
-            email = '${userInfo.email}'
-        WHERE userName = '${userName}'`;
-    }
-    catch (err) {
-        console.error(err.message)
-        let result = "Error";
-        let message = err.message
+        const [countRows, users] = await Promise.all([
+            db.query(countSql),
+            db.query(listSql, [offset, pageSize]),
+        ]);
 
-        // 400 Bad Request: Invalid data
-        res.status(400).json({
-            result: result,
-            message: message
-        });
-
-        return;
-    }
-
-    db.pool.query(sql, (err, data) => {
-        let result = "OK";
-        let message = "";
-
-        if (err) {
-            console.error(err.message);
-
-            switch (err.code) {
-                default:
-                    result = "Error";
-                    message = err.sqlMessage
-                    res.status(500).json({
-                        result: result,
-                        message: message
-                    });
-                    break;
-            }
-        } else {
-            if (data.affectedRows === 0) {
-                res.status(404).json({
-                    result: "NotOK",
-                    message: "User not found."
-                });
-            } else {
-                res.status(200).json(resultOK);
-            }
+        if (users.length === 0) {
+            return sendNotFound(res, 'User not found.');
         }
-    });
+
+        return res.status(200).json({
+            total: countRows[0].total,
+            pageSize,
+            page,
+            users: users.map(mapUser),
+        });
+    } catch (err) {
+        return handleDbError(res, err);
+    }
 });
 
+router.get('/:userName', async (req, res) => {
+    const targetUserName = req.params.userName;
 
-/**
- * Delete the specific user.
- */
-router.delete('/:userName', (req, res) => {
-    // Check if the user is admin
-    if (req.session.roleID != 3) {
-        res.status(403).json({
-            result: "Error",
-            message: "You are not authorized."
-        });
-        return;
+    if (!isAdmin(req) && req.session.userName !== targetUserName) {
+        return sendForbidden(res);
     }
 
-    let userName = req.params.userName;
-    let sql = "";
+    const sql = `
+        SELECT A.userName, A.fullName, A.email, A.roleID, B.roleName
+        FROM UserInfo A
+            LEFT JOIN Roles B ON A.roleID = B.roleID
+        WHERE A.userName = ?
+        LIMIT 1`;
 
     try {
-        sql = `DELETE FROM UserInfo WHERE userName = '${userName}'`;
-    }
-    catch (err) {
-        console.error(err.message)
-        let result = "Error";
-        let message = err.message
+        const rows = await db.query(sql, [targetUserName]);
 
-        // 400 Bad Request: Invalid data
-        res.status(400).json({
-            result: result,
-            message: message
-        });
-
-        return;
-    }
-
-    db.pool.query(sql, (err, data) => {
-        if (err) {
-            console.error(err.message);
-
-            switch (err.code) {
-                default:
-                    let result = "Error";
-                    let message = err.sqlMessage
-                    res.status(500).json({
-                        result: result,
-                        message: message
-                    });
-                    break;
-            }
-        } else {
-            if (data.affectedRows === 0) {
-                res.status(404).json({
-                    result: "NotOK",
-                    message: "User not found."
-                });
-            } else {
-                res.status(200).json(resultOK);
-            }
+        if (rows.length === 0) {
+            return sendNotFound(res, 'User not found.');
         }
-    });
+
+        return res.status(200).json(mapUser(rows[0]));
+    } catch (err) {
+        return handleDbError(res, err);
+    }
 });
 
+router.put('/:userName', async (req, res) => {
+    if (!isAdmin(req)) {
+        return sendForbidden(res);
+    }
+
+    const targetUserName = req.params.userName;
+    const { fullName, email } = req.body;
+
+    if (!fullName || !email) {
+        return sendBadRequest(res, 'fullName and email are required.');
+    }
+
+    const sql = `
+        UPDATE UserInfo
+        SET fullName = ?, email = ?
+        WHERE userName = ?`;
+
+    try {
+        const result = await db.query(sql, [fullName, email, targetUserName]);
+
+        if (result.affectedRows === 0) {
+            return sendNotFound(res, 'User not found.');
+        }
+
+        return res.status(200).json({
+            result: 'OK',
+            message: '',
+        });
+    } catch (err) {
+        return handleDbError(res, err);
+    }
+});
+
+router.delete('/:userName', async (req, res) => {
+    if (!isAdmin(req)) {
+        return sendForbidden(res);
+    }
+
+    const sql = 'DELETE FROM UserInfo WHERE userName = ?';
+
+    try {
+        const result = await db.query(sql, [req.params.userName]);
+
+        if (result.affectedRows === 0) {
+            return sendNotFound(res, 'User not found.');
+        }
+
+        return res.status(200).json({
+            result: 'OK',
+            message: '',
+        });
+    } catch (err) {
+        return handleDbError(res, err);
+    }
+});
 
 module.exports = router;
